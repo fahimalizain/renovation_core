@@ -117,8 +117,7 @@ class FrappeMiddleware:
 
             response = await call_next(request)
 
-            # TODO: Make this more verbose. Do this only when route not found
-            if response and response.status_code == 404:
+            if response and response.status_code == 404 and frappe.conf.get("developer_mode"):
                 frappe.destroy()  # Let frappe init fresh
                 responder = WSGIResponder(frappe_application, scope)
 
