@@ -13,9 +13,9 @@ Renovation Frappe Framework
 - All READ operations on the DB will be driven by async-db-drivers
 
 ## Guides
-- Setting Up
-- Make your new app
-- Playing with DocTypes
+- [Setting Up](./docs/setting-up.md)
+- [Make your new app](./docs/new-app.md)
+- [Playing with DocTypes](./docs/doctypes.md)
 - FastAPI Endpoints in your app
 - Running in Development & Production
 

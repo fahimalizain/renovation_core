@@ -7,7 +7,7 @@ with open("requirements.txt") as f:
 from renovation import __version__ as version
 
 setup(
-    name="renovation_frappe",
+    name="renovation_core",
     version=version,
     description="Renovation Frappe Framework",
     author="Leam",
