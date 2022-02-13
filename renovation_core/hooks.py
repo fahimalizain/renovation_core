@@ -1,7 +1,7 @@
 from . import __version__ as app_version  # noqa
 
-app_name = "renovation_frappe"
-app_title = "Renovation Frappe"
+app_name = "renovation_core"
+app_title = "Renovation Core"
 app_publisher = "Leam"
 app_description = "Renovation Frappe Framework"
 app_icon = "octicon octicon-file-directory"
@@ -13,15 +13,15 @@ app_license = "MIT"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/renovation_frappe/css/renovation_frappe.css"
-# app_include_js = "/assets/renovation_frappe/js/renovation_frappe.js"
+# app_include_css = "/assets/renovation_core/css/renovation_core.css"
+# app_include_js = "/assets/renovation_core/js/renovation_core.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/renovation_frappe/css/renovation_frappe.css"
-# web_include_js = "/assets/renovation_frappe/js/renovation_frappe.js"
+# web_include_css = "/assets/renovation_core/css/renovation_core.css"
+# web_include_js = "/assets/renovation_core/js/renovation_core.js"
 
 # include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "renovation_frappe/public/scss/website"
+# website_theme_scss = "renovation_core/public/scss/website"
 
 # include js, css files in header of web form
 # webform_include_js = {"doctype": "public/js/doctype.js"}
@@ -56,20 +56,20 @@ app_license = "MIT"
 # Installation
 # ------------
 
-# before_install = "renovation_frappe.install.before_install"
-# after_install = "renovation_frappe.install.after_install"
+# before_install = "renovation_core.install.before_install"
+# after_install = "renovation_core.install.after_install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "renovation_frappe.uninstall.before_uninstall"
-# after_uninstall = "renovation_frappe.uninstall.after_uninstall"
+# before_uninstall = "renovation_core.uninstall.before_uninstall"
+# after_uninstall = "renovation_core.uninstall.after_uninstall"
 
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
 
-# notification_config = "renovation_frappe.notifications.get_notification_config"
+# notification_config = "renovation_core.notifications.get_notification_config"
 
 # Permissions
 # -----------
@@ -111,39 +111,39 @@ override_doctype_class = {
 
 # scheduler_events = {
 # 	"all": [
-# 		"renovation_frappe.tasks.all"
+# 		"renovation_core.tasks.all"
 # 	],
 # 	"daily": [
-# 		"renovation_frappe.tasks.daily"
+# 		"renovation_core.tasks.daily"
 # 	],
 # 	"hourly": [
-# 		"renovation_frappe.tasks.hourly"
+# 		"renovation_core.tasks.hourly"
 # 	],
 # 	"weekly": [
-# 		"renovation_frappe.tasks.weekly"
+# 		"renovation_core.tasks.weekly"
 # 	]
 # 	"monthly": [
-# 		"renovation_frappe.tasks.monthly"
+# 		"renovation_core.tasks.monthly"
 # 	]
 # }
 
 # Testing
 # -------
 
-# before_tests = "renovation_frappe.install.before_tests"
+# before_tests = "renovation_core.install.before_tests"
 
 # Overriding Methods
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "renovation_frappe.event.get_events"
+# 	"frappe.desk.doctype.event.event.get_events": "renovation_core.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-# 	"Task": "renovation_frappe.task.get_dashboard_data"
+# 	"Task": "renovation_core.task.get_dashboard_data"
 # }
 
 # exempt linked doctypes from being automatically cancelled
@@ -179,5 +179,5 @@ user_data_fields = [
 # --------------------------------
 
 # auth_hooks = [
-# 	"renovation_frappe.auth.validate"
+# 	"renovation_core.auth.validate"
 # ]
