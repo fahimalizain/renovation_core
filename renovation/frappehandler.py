@@ -157,6 +157,8 @@ async def make_wsgi_compatible(request: Request):
         for i, lang in enumerate(request.accept_languages.split(";")[0].split(",")):
             _lang[i] = lang
         request.accept_languages = _lang
+    else:
+        request.accept_languages = dict()
 
     # !important to ask for body before form
     body = frappe.safe_decode(await request.body())
