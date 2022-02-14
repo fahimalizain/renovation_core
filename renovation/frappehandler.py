@@ -15,6 +15,7 @@ import frappe.app
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from frappe.middlewares import StaticDataMiddleware
 
+from renovation.utils import thread_safe_db
 
 frappe.app._site = os.environ.get("SITE_NAME", "test.localhost")
 frappe_application = SharedDataMiddleware(frappe.app.application, {
@@ -114,6 +115,7 @@ class FrappeMiddleware:
         try:
             await make_wsgi_compatible(request=request)
             frappe.app.init_request(request=request)
+            # thread_safe_db(frappe.local.db)
 
             response = await call_next(request)
 
