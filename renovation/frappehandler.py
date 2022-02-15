@@ -12,10 +12,11 @@ from asyncer import asyncify
 
 import frappe
 import frappe.app
+import frappe.auth
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from frappe.middlewares import StaticDataMiddleware
 
-from renovation.utils import thread_safe_db
+from renovation.utils.async_db import thread_safe_db, obtain_pool_connection
 
 frappe.app._site = os.environ.get("SITE_NAME", "test.localhost")
 frappe_application = SharedDataMiddleware(frappe.app.application, {
@@ -26,26 +27,28 @@ frappe_application = StaticDataMiddleware(frappe_application, {
     str('/files'): str(os.path.abspath(frappe.app._sites_path))
 })
 
-# werkzeug.Local is based on ContextVar
-# class Local:
-#     class _Local:
-#         request: Request
-#         response: Response
-#         session: dict
-#         user: dict
-#         form_dict: dict
-#         form: dict
 
-#     _ctx: ContextVar[_Local] = ContextVar("locals")
-#     _ctx_token: Token[_Local] = None
+def _connect(site=None, db_name=None, set_admin_as_user=True):
+    """Connect to site database instance.
 
-#     def new_ctx(self):
-#         local = self._Local()
-#         self._ctx_token = self._ctx.set(local)
+    :param site: If site is given, calls `frappe.init`.
+    :param db_name: Optional. Will use from `site_config.json`.
+    :param set_admin_as_user: Set Administrator as current user.
+    """
+    from frappe.database import get_db
+    if site:
+        frappe.init(site)
 
-#     def release(self):
-#         self._ctx.reset(self._ctx_token)
+    frappe.local.db = get_db(user=db_name or frappe.local.conf.db_name)
+    obtain_pool_connection(frappe.local.db)
+    thread_safe_db(frappe.local.db)
+    if set_admin_as_user:
+        frappe.set_user("Administrator")
 
+# The following two overrides exists
+# Since we use frappe.app.init_request (which invokes TWO DB Connections o.O FRAPPE BUG)
+frappe.auth.HTTPRequest.connect = lambda *args, **kwargs: None
+frappe.connect = _connect
 
 class FrappeMiddleware:
     # Copy of starlette.middleware.BaseHTTPMiddleware
@@ -115,7 +118,6 @@ class FrappeMiddleware:
         try:
             await make_wsgi_compatible(request=request)
             frappe.app.init_request(request=request)
-            # thread_safe_db(frappe.local.db)
 
             response = await call_next(request)
 

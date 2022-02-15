@@ -18,7 +18,7 @@ Renovation Frappe Framework
 - [Playing with DocTypes](./docs/doctypes.md)
 - FastAPI Endpoints in your app
 - Running in Development & Production
-
+- [Multi Threading (asyncer) and DB Connection](./docs/db-multithreaded.md)
 
 #### License
 
