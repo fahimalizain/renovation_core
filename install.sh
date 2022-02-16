@@ -30,4 +30,5 @@ do
 done
 # echo "Finall Apps: ${installed_apps[*]}"
 
+printf "%s\n" "${installed_apps[@]}" > ./sites/apps.txt
 echo -e " - Updated apps.txt"
