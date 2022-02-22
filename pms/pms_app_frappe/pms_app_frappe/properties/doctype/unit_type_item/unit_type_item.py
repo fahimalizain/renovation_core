@@ -1,13 +1,14 @@
 # Copyright (c) 2022, Leam Technology Systems and contributors
 # For license information, please see license.txt
 
-# import frappe
-# from frappe import _
-from frappe.model.document import Document
+from renovation.model import map_doctype
 # from pms_app.properties.exceptions import UnitTypeNotFound
+from pms_app.properties.models.unit_type_item import UnitTypeItem as _UnitTypeItem
+
+map_doctype("Unit Type Item", _UnitTypeItem)
 
 
-class UnitTypeItem(Document):
+class UnitTypeItem(_UnitTypeItem):
     pass
     # def validate_unit_type_enabled(self):
 

@@ -2,6 +2,7 @@ from typing import Union, List, Optional, TypeVar, Generic
 
 import frappe
 from frappe.model.document import Document
+import asyncer
 
 T = TypeVar("T")
 
@@ -21,18 +22,18 @@ class FrappeModel(Generic[T], Document):
         return doctype_map[cls]
 
     @classmethod
-    def get_doc(cls, doc_id: str) -> Optional[T]:
+    async def get_doc(cls, doc_id: str) -> Optional[T]:
         if cls.exists(doc_id):
-            return frappe.get_doc(cls.get_doctype(), doc_id)
+            return await asyncer.asyncify(frappe.get_doc)(cls.get_doctype(), doc_id)
         return None
 
     @classmethod
-    def get_all(cls,
+    async def get_all(cls,
                 filters: dict,
                 fields: List[str],
                 offset: int = 0,
                 count: int = 10) -> List[T]:
-        return frappe.get_all(cls.get_doctype(), filters=filters, fields=fields, limit_start=offset,
+        return await asyncer.asyncify(frappe.get_all)(cls.get_doctype(), filters=filters, fields=fields, limit_start=offset,
                               limit_page_length=count)
 
     @classmethod
