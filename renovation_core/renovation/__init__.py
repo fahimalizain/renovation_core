@@ -5,6 +5,11 @@ from .orm import Field, Column  # noqa
 from .model import FrappeModel as RenovationModel  # noqa
 
 
+def _(txt, lang=None, context=None):
+    from frappe import _
+    return _(txt, lang=lang, context=context)
+
+
 class _dict(dict):
     """dict like object that exposes keys as attributes"""
 
