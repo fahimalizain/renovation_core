@@ -25,6 +25,7 @@ def get_app():
         if not renovation_app:
             continue
 
+        frappe.get_module(renovation_app)
         renovation_apps.append(renovation_app)
         for module in frappe.get_module_list(app):
             module = frappe.scrub(module)

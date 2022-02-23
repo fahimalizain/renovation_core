@@ -11,6 +11,7 @@ app_license = "MIT"
 
 # Includes in <head>
 # ------------------
+renovation_app = "pms_app"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pms_app_frappe/css/pms_app_frappe.css"
