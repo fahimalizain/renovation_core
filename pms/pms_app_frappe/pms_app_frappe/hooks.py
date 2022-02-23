@@ -1,4 +1,4 @@
-from . import __version__ as app_version
+from . import __version__ as app_version  # noqa
 
 app_name = "pms_app_frappe"
 app_title = "PMS App Frappe"
@@ -12,6 +12,10 @@ app_license = "MIT"
 # Includes in <head>
 # ------------------
 renovation_app = "pms_app"
+
+graphql_sdl_dir = [
+    "pms_app/properties/graphql/types"
+]
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pms_app_frappe/css/pms_app_frappe.css"
@@ -153,24 +157,24 @@ renovation_app = "pms_app"
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization
@@ -179,4 +183,3 @@ user_data_fields = [
 # auth_hooks = [
 # 	"pms_app_frappe.auth.validate"
 # ]
-
