@@ -45,10 +45,12 @@ def _connect(site=None, db_name=None, set_admin_as_user=True):
     if set_admin_as_user:
         frappe.set_user("Administrator")
 
+
 # The following two overrides exists
 # Since we use frappe.app.init_request (which invokes TWO DB Connections o.O FRAPPE BUG)
-# frappe.auth.HTTPRequest.connect = lambda *args, **kwargs: None
-# frappe.connect = _connect
+frappe.auth.HTTPRequest.connect = lambda *args, **kwargs: None
+frappe.connect = _connect
+
 
 class FrappeMiddleware:
     # Copy of starlette.middleware.BaseHTTPMiddleware
@@ -125,13 +127,7 @@ class FrappeMiddleware:
                 frappe.destroy()  # Let frappe init fresh
                 responder = WSGIResponder(frappe_application, scope)
 
-                # receive is basically reading request-body
-                message = {
-                    "type": "http.request",
-                    "body": request._body,
-                    "more_body": False,
-                }
-                await responder(asyncify(lambda: message), send)
+                await responder(request.receive, send)
                 response = None
 
         except BaseException as e:
@@ -172,3 +168,9 @@ async def make_wsgi_compatible(request: Request):
 
     request.args = request.query_params
     request.get_data = lambda **kwargs: body
+
+    request._receive = asyncify(lambda: {
+        "type": "http.request",
+        "body": request._body,
+        "more_body": False,
+    })
