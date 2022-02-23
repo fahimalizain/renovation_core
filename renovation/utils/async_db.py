@@ -66,12 +66,12 @@ T = TypeVar("T")
 
 
 def asyncify(
-    function: Callable[[T_ParamSpec], T_Retval],
+    function: Callable[T_ParamSpec, T_Retval],
     *,
     cancellable: bool = False,
     limiter: Optional[anyio.CapacityLimiter] = None,
     db_read_only=False,
-) -> Callable[[T_ParamSpec], Awaitable[T_Retval]]:
+) -> Callable[T_ParamSpec, Awaitable[T_Retval]]:
     # db_read_only = True
     def wrap_db(fn):
         def inner(*args, **kwargs):

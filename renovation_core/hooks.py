@@ -181,11 +181,3 @@ user_data_fields = [
 # auth_hooks = [
 # 	"renovation_core.auth.validate"
 # ]
-
-graphql_sdl_dir = [
-    "./renovation_core/renovation_core/graphql/types"
-]
-
-graphql_schema_processors = [
-    "renovation_core.graphql.resolvers.ping.bind"
-]

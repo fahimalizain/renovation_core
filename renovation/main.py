@@ -1,16 +1,12 @@
 import os
-
-import uvicorn
 from fastapi import FastAPI
-from graphql import GraphQLError
+
 import frappe
-from renovation_core.graphql import execute, log_error
 from .frappehandler import FrappeMiddleware
 
 
 def get_app():
     fastapi_app = FastAPI()
-
     fastapi_app.add_middleware(FrappeMiddleware)
 
     @fastapi_app.get("/info")
@@ -21,29 +17,6 @@ def get_app():
             "available_doctypes": available_doctypes,
             "settings": settings.as_dict(),
         }
-
-    @fastapi_app.post("/graphql")
-    async def graphql_resolver(body: dict):
-        graphql_request = frappe.parse_json(body)
-        query = graphql_request.query
-        variables = graphql_request.variables
-        operation_name = graphql_request.operationName
-        output = await execute(query, variables, operation_name)
-        if len(output.get("errors", [])):
-            log_error(query, variables, operation_name, output)
-            errors = []
-            for err in output.errors:
-                if isinstance(err, GraphQLError):
-                    err = err.formatted
-                errors.append(err)
-            output.errors = errors
-            errors = []
-            for err in output.errors:
-                if isinstance(err, GraphQLError):
-                    err = err.formatted
-                errors.append(err)
-            output.errors = errors
-        return output
 
     renovation_apps = []
     # Load Frappe ORMs
@@ -81,6 +54,3 @@ def get_app():
 
 
 app = get_app()
-
-# if __name__ == "__main__":
-#     uvicorn.run("renovation.main:app", host="0.0.0.0", port=8004, loop="uvloop", workers=None)
