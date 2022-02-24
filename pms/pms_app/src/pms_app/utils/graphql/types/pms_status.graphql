@@ -1,0 +1,4 @@
+enum PMSStatus {
+    SUCCESS
+    FAILURE
+}

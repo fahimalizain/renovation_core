@@ -1,0 +1,28 @@
+
+input PropertyCreateInput {
+  active: Int
+  property_name: String!
+  property_type: String!
+  description: String
+  address: String
+  city: String
+  beneficiary: String!
+  units: [UnitItemCreateInput!]
+}
+
+input PropertyUpdateInput {
+  active: Int
+  property_name: String
+  property_type: String
+  description: String
+  address: String
+  city: String
+  beneficiary: String
+  units: [UnitItemUpdateInput!]
+}
+
+extend type Mutation {
+  propertyCreate(input: PropertyCreateInput!): Property!
+  propertyUpdate(name: String!, input: PropertyUpdateInput!): Property!
+  propertyDelete(name: String!): Property!
+}

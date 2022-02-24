@@ -1,0 +1,11 @@
+
+input UnitTypeItemCreateInput {
+  enabled: Int
+  unit_type: String!
+}
+
+input UnitTypeItemUpdateInput {
+  name: String
+  enabled: Int
+  unit_type: String
+}

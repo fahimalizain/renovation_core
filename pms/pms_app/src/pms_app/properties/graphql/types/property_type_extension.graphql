@@ -1,0 +1,20 @@
+
+input PropertyTypeCreateInput {
+  enabled: Int
+  title: String!
+  has_units: Int
+  unit_types: [UnitTypeItemCreateInput!]
+}
+
+input PropertyTypeUpdateInput {
+  enabled: Int
+  title: String
+  has_units: Int
+  unit_types: [UnitTypeItemUpdateInput!]
+}
+
+extend type Mutation {
+  propertyTypeCreate(input: PropertyTypeCreateInput!): PropertyType!
+  propertyTypeUpdate(name: String!, input: PropertyTypeUpdateInput!): PropertyType!
+  propertyTypeDelete(name: String!): PropertyType!
+}

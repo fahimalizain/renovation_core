@@ -1,0 +1,15 @@
+
+input UnitTypeAttributeItemCreateInput {
+  title: String!
+  attribute_type: UnitTypeAttributeItemAttributeTypeSelectOptions!
+  select_options: String
+  default_value: String!
+}
+
+input UnitTypeAttributeItemUpdateInput {
+  name: String
+  title: String
+  attribute_type: UnitTypeAttributeItemAttributeTypeSelectOptions
+  select_options: String
+  default_value: String
+}

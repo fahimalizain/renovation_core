@@ -1,0 +1,27 @@
+
+input UnitCreateInput {
+  active: Int
+  unit_name: String!
+  unit_number: Int
+  description: String
+  unit_type: String!
+  size: Float
+  unit_attributes: [UnitAttributeItemCreateInput!]
+}
+
+input UnitUpdateInput {
+  active: Int
+  unit_name: String
+  unit_number: Int
+  description: String
+  unit_type: String
+  size: Float
+  unit_attributes: [UnitAttributeItemUpdateInput!]
+}
+
+
+extend type Mutation {
+    unitCreate(input: UnitCreateInput!): Unit!
+    unitUpdate(name: ID!, input: UnitUpdateInput!): Unit!
+    unitDelete(name: ID!): Unit!
+}

@@ -48,8 +48,8 @@ def _connect(site=None, db_name=None, set_admin_as_user=True):
 
 # The following two overrides exists
 # Since we use frappe.app.init_request (which invokes TWO DB Connections o.O FRAPPE BUG)
-frappe.auth.HTTPRequest.connect = lambda *args, **kwargs: None
-frappe.connect = _connect
+# frappe.auth.HTTPRequest.connect = lambda *args, **kwargs: None
+# frappe.connect = _connect
 
 
 class FrappeMiddleware:

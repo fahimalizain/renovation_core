@@ -1,0 +1,7 @@
+type PropertyType {
+  name: String
+  enabled: Int
+  title: String!
+  has_units: Int
+  unit_types: [UnitTypeItem!]
+}

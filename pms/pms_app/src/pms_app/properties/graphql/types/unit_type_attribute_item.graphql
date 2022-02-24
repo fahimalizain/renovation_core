@@ -1,0 +1,14 @@
+type UnitTypeAttributeItem {
+  name: String
+  title: String!
+  attribute_type: UnitTypeAttributeItemAttributeTypeSelectOptions
+  select_options: String
+  default_value: String!
+}
+
+enum UnitTypeAttributeItemAttributeTypeSelectOptions {
+  SELECT
+  MULTI_SELECT
+  DATA
+  NUMBER
+}

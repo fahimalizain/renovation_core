@@ -1,0 +1,47 @@
+extend type Mutation {
+    ContactAdd(data: ContactAddInput!): PMSContact!
+    ContactUpdate(name: ID!, data: ContactUpdateInput!): PMSContact!
+    ContactDelete(name: ID!): PMSStatus!
+}
+
+input ContactAddInput {
+    first_name: String!
+    last_name: String
+    email_id: String
+    mobile_no: String
+    address: String
+    national_id: String
+    national_id_expiry: String
+
+    contact_type: PMSContactContactType!
+
+    is_company: Boolean
+    company_name: String
+    company_representative_contact: ContactInput
+
+    notify_email: Boolean
+    notify_sms: Boolean
+    notify_telegram: Boolean
+    notify_whatsapp: Boolean
+}
+
+input ContactUpdateInput {
+    first_name: String
+    last_name: String
+    email_id: String
+    mobile_no: String
+    address: String
+    national_id: String
+    national_id_expiry: String
+
+    contact_type: PMSContactContactType
+
+    is_company: Boolean
+    company_name: String
+    company_representative_contact: ContactInput
+
+    notify_email: Boolean
+    notify_sms: Boolean
+    notify_telegram: Boolean
+    notify_whatsapp: Boolean
+}

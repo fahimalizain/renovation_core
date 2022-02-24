@@ -1,0 +1,13 @@
+type Property {
+  name: String
+  active: Int
+  property_name: String!
+  property_type: PropertyType!
+  property_type__name: String
+  description: String
+  address: String
+  city: String
+  beneficiary: PMSContact!
+  beneficiary__name: String
+  units: [UnitItem!]!
+}

@@ -14,7 +14,13 @@ app_license = "MIT"
 renovation_app = "pms_app"
 
 graphql_sdl_dir = [
-    "pms_app/properties/graphql/types"
+    "pms_app/utils/graphql/types",
+    "pms_app/pms_core/graphql/types",
+    "pms_app/properties/graphql/types",
+]
+
+graphql_schema_processors = [
+    "pms_app.pms_core.graphql.bind_resolvers"
 ]
 
 # include js, css files in header of desk.html

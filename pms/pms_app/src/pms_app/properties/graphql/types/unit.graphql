@@ -1,0 +1,11 @@
+type Unit {
+  name: String
+  active: Int
+  unit_name: String!
+  unit_number: Int
+  description: String
+  unit_type: UnitType!
+  unit_type__name: String
+  size: Float
+  unit_attributes: [UnitAttributeItem!]!
+}

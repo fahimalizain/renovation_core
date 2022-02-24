@@ -1,0 +1,6 @@
+type UnitType {
+  name: String
+  enabled: Int
+  title: String!
+  unit_attributes: [UnitTypeAttributeItem!]!
+}

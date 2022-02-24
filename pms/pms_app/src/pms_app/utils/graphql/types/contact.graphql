@@ -1,0 +1,54 @@
+type Contact {
+  doctype: String
+  name: String!
+  first_name: String!
+  middle_name: String
+  last_name: String
+  email_id: String
+  user: User
+  user__name: String
+  # address: Address
+  # address__name: String
+  status: ContactStatus
+  # salutation: Salutation
+  salutation__name: String
+  designation: String
+  gender: Gender
+  gender__name: String
+  phone: String
+  mobile_no: String
+  company_name: String
+  image: String
+  email_ids: [ContactEmail!]!
+  phone_nos: [ContactPhone!]!
+  links: [DynamicLink!]!
+  is_primary_contact: Int
+  department: String
+  unsubscribed: Int
+}
+
+enum ContactStatus {
+  PASSIVE
+  OPEN
+  REPLIED
+}
+
+type ContactEmail {
+  email_id: String!
+  is_primary: Boolean
+}
+
+type ContactPhone {
+  phone: String!
+  is_primary_phone: Boolean
+  is_primary_mobile_no: Boolean
+}
+
+
+input ContactInput {
+  first_name: String!
+  middle_name: String
+  last_name: String
+  email_id: String!
+  mobile_no: String!
+}
