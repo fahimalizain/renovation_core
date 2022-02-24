@@ -117,6 +117,7 @@ class FrappeMiddleware:
             send: Send) -> Response:
 
         response = None
+        commit = True
         try:
             await make_wsgi_compatible(request=request)
             frappe.app.init_request(request=request)
@@ -129,8 +130,10 @@ class FrappeMiddleware:
 
                 await responder(request.receive, send)
                 response = None
+                commit = False
 
         except BaseException as e:
+            commit = False
             print(frappe.get_traceback())
             response = Response()
             response.status_code = 500
@@ -139,6 +142,8 @@ class FrappeMiddleware:
                 traceback=frappe.get_traceback()
             )))
         finally:
+            if commit:
+                frappe.db.commit()
             frappe.destroy()
 
         return response
@@ -169,8 +174,11 @@ async def make_wsgi_compatible(request: Request):
     request.args = request.query_params
     request.get_data = lambda **kwargs: body
 
-    request._receive = asyncify(lambda: {
-        "type": "http.request",
-        "body": request._body,
-        "more_body": False,
-    })
+    async def _receive():
+        return {
+            "type": "http.request",
+            "body": request._body,
+            "more_body": False,
+        }
+
+    request._receive = _receive
