@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from renovation_graphql import graphql_resolver
+from renovation_graphql import graphql_resolver as _graphql_resolver
 
 
 router = APIRouter()
@@ -11,5 +11,5 @@ def hello():
 
 
 @router.post("/graphql")
-def _graphql_resolver(body: dict):
-    return graphql_resolver(body=body)
+async def graphql_resolver(body: dict):
+    return await _graphql_resolver(body=body)

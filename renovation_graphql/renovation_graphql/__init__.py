@@ -89,7 +89,15 @@ def get_schema():
 
 
 def get_typedefs():
-    schema = ""
+    schema = """
+    type Query {
+        ping: String
+    }
+
+    type Mutation {
+        ping: String
+    }
+    """
     for dir in renovation.get_hooks("graphql_sdl_dir"):
         """
         graphql_sdl_dir = "pms_app/graphql/types"
@@ -99,7 +107,7 @@ def get_typedefs():
         dir = dir.lstrip("/")
         _dir = os.path.join(
             os.path.dirname(renovation.get_module(dir.split("/")[0]).__file__),
-            dir.split("/")[1:].join("/")
+            "/".join(dir.split("/")[1:])
         )
 
         schema += f"\n\n\n# {dir}\n\n"
