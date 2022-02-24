@@ -63,7 +63,7 @@ class FrappeModel(Generic[T], Document):
 
     @classmethod
     async def get_doc(cls, doc_id: str) -> Optional[T]:
-        if cls.exists(doc_id):
+        if await cls.exists(doc_id):
             return await asyncer.asyncify(frappe.get_doc)(cls.get_doctype(), doc_id)
         return None
 
@@ -93,8 +93,8 @@ class FrappeModel(Generic[T], Document):
         return frappe.db.count(cls.get_doctype(), filters=filters)
 
     @classmethod
-    def exists(cls, doc_id: str):
-        return frappe.db.exists(cls.get_doctype(), doc_id)
+    async def exists(cls, doc_id: str):
+        return asyncer.asyncify(frappe.db.exists)(cls.get_doctype(), doc_id)
 
     async def reload(self) -> T:
         super().reload()
@@ -110,6 +110,7 @@ class FrappeModel(Generic[T], Document):
         self.check_if_latest()
         await self.run_method("before_insert")
         self._validate_links()
+        # TODO: Update the event handlers inside to be async
         self.set_new_name()  # set_name=set_name, set_child_names=set_child_names
         self.set_parent_in_children()
         self.validate_higher_perm_levels()
@@ -134,7 +135,7 @@ class FrappeModel(Generic[T], Document):
         for d in self.get_all_children():
             await asyncer.asyncify(d.db_insert)()
 
-        self.run_method("after_insert")
+        await self.run_method("after_insert")
         self.flags.in_insert = True
 
         # flag to prevent creation of event update log for create and update both
@@ -229,7 +230,7 @@ class FrappeModel(Generic[T], Document):
 
         await asyncer.asyncify(self.save_version)()
 
-        self.run_method('on_change')
+        await self.run_method('on_change')
 
         if (self.doctype, self.name) in frappe.flags.currently_saving:
             frappe.flags.currently_saving.remove((self.doctype, self.name))
