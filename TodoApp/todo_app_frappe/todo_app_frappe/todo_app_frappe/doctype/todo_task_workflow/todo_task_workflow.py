@@ -2,7 +2,7 @@
 # For license information, please see license.txt
 
 
-from models.todo_workflow import TodoTaskWorkflow as _TodoTaskWorkflow
+from todo_app.models.todo_workflow import TodoTaskWorkflow as _TodoTaskWorkflow
 from renovation.model import map_doctype
 
 map_doctype("Todo Task Workflow", _TodoTaskWorkflow)

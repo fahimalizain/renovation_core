@@ -1,4 +1,5 @@
-from fsm_workflows.todo_task_workflow.todo_task_workflow_frappe import ToDoTaskWorkflowMachineMixin
+from todo_app.fsm_workflows.todo_task_workflow.todo_task_workflow_frappe import \
+    ToDoTaskWorkflowMachineMixin
 from renovation import RenovationModel
 
 

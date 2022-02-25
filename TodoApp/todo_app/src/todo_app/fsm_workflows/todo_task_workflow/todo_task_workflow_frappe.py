@@ -1,5 +1,6 @@
 import frappe
-from fsm_workflows.todo_task_workflow.todo_task_workflow_status_base import ToDoTaskWorkflowStatus
+from todo_app.fsm_workflows.todo_task_workflow.todo_task_workflow_status_base import \
+    ToDoTaskWorkflowStatus
 from renovation.utils.fsm import FrappeDocumentFSM
 from transitions import Machine
 
