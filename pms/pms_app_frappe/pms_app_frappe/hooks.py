@@ -20,7 +20,8 @@ graphql_sdl_dir = [
 ]
 
 graphql_schema_processors = [
-    "pms_app.pms_core.graphql.bind_resolvers"
+    "pms_app.pms_core.graphql.bind_resolvers",
+    "pms_app.properties.graphql.bind_resolvers",
 ]
 
 # include js, css files in header of desk.html

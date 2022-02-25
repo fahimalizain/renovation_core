@@ -1,3 +1,4 @@
+import inspect
 from typing import Optional
 
 from graphql import GraphQLError
@@ -8,13 +9,24 @@ def PMSGQLException(fn):
     """
     Use this function decorator to automatically map PMSException to GQLError
     """
+    is_async = inspect.isawaitable(fn)
+
     def _inner(*args, **kwargs):
         try:
             return fn(*args, **kwargs)
         except PMSException as e:
             raise e.as_gql_error()
 
-    return _inner
+    async def _inner_async(*args, **kwargs):
+        try:
+            return await fn(*args, **kwargs)
+        except PMSException as e:
+            raise e.as_gql_error()
+
+    if is_async:
+        return _inner_async
+    else:
+        return _inner
 
 
 class PMSException(Exception):

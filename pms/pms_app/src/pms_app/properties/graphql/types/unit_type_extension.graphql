@@ -15,5 +15,5 @@ input UnitTypeUpdateInput {
 extend type Mutation {
     unitTypeCreate(input: UnitTypeCreateInput!): UnitType!
     unitTypeUpdate(name: ID!, input: UnitTypeUpdateInput!): UnitType!
-    unitTypeDelete(name: ID!): UnitType!
+    unitTypeDelete(name: ID!): PMSStatus!
 }
