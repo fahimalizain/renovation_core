@@ -1,8 +1,0 @@
-README.md
-setup.py
-renovation_graphql/__init__.py
-renovation_graphql.egg-info/PKG-INFO
-renovation_graphql.egg-info/SOURCES.txt
-renovation_graphql.egg-info/dependency_links.txt
-renovation_graphql.egg-info/requires.txt
-renovation_graphql.egg-info/top_level.txt
