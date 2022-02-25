@@ -47,6 +47,10 @@ class FrappeModel(Generic[T], Document):
         if not args and not kwargs:
             args = [{"doctype": self.get_doctype()}]
 
+        if args and isinstance(args, (list, tuple)) and isinstance(args[0], dict):
+            # doc = Product(dict(title="Product A"))
+            args[0]["doctype"] = self.get_doctype()
+
         return super().__init__(*args, **kwargs)
 
     @classmethod
