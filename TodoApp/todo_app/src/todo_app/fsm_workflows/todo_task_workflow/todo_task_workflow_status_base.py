@@ -50,7 +50,7 @@ class ToDoTaskWorkflowStatus(StatusBase):
         },
         {
             'trigger': MARK_COMPLETED,
-            'source': DRAFT,
+            'source': ACTIVE,
             'dest': COMPLETED,
         },
         {
