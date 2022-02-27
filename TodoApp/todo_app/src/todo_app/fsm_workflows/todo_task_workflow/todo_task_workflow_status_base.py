@@ -17,10 +17,10 @@ class ToDoTaskWorkflowStatus(StatusBase):
     )
 
     # Define the transitions as constants
-    ACTIVATE = 'activate_todo'
-    MARK_COMPLETED = 'make_completed'
-    MARK_DELETED = 'mark_deleted'
-    REVERT_DELETED = 'revert_delete'
+    ACTIVATE = '_activate_todo'
+    MARK_COMPLETED = '_make_completed'
+    MARK_DELETED = '_mark_deleted'
+    REVERT_DELETED = '_revert_delete'
 
     # Give the transitions a human readable label
     TRANSITION_LABELS = {

@@ -5,3 +5,4 @@ from .create_todo import *
 from .delete_todo import *
 from .revert_delete import *
 from .activate_todo import *
+from .edit_todo import *

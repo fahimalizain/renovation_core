@@ -18,8 +18,11 @@ class ToDoTaskWorkflowMachineMixin(FrappeDocumentFSM):
             initial=self.get(self.wf_state) or self.status_class.SM_INITIAL_STATE,
             finalize_event='wf_finalize',
             auto_transitions=False,
+            send_event=True,
             **self.status_class.get_kwargs()  # noqa: C815
         )
+        if not self.get(self.wf_date):
+            self.set(self.wf_date, frappe.utils.now())
 
     @property
     def state(self):
