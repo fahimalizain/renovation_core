@@ -15,6 +15,6 @@ input PropertyTypeUpdateInput {
 
 extend type Mutation {
   propertyTypeCreate(input: PropertyTypeCreateInput!): PropertyType!
-  propertyTypeUpdate(name: String!, input: PropertyTypeUpdateInput!): PropertyType!
-  propertyTypeDelete(name: String!): PropertyType!
+  propertyTypeUpdate(name: ID!, input: PropertyTypeUpdateInput!): PropertyType!
+  propertyTypeDelete(name: ID!): PMSStatus!
 }
