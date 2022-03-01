@@ -88,7 +88,7 @@ app_license = "MIT"
 # Override standard doctype classes
 
 override_doctype_class = {
-    # "DocType": "renovation."
+    "DocType": "renovation_core.overrides.doctype.doctype.DocTypeOverride"
 }
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"

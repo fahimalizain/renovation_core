@@ -1,0 +1,6 @@
+from renovation import RenovationModel
+from .{self_dir} import {modelname}Feilds
+
+
+class {modelname}(RenovationModel["{modelname}"], {modelname}Fields):
+    pass

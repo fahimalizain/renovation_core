@@ -9,6 +9,8 @@ app_color = "grey"
 app_email = "info@leam.ae"
 app_license = "MIT"
 
+renovation_app = "school_app"
+
 # Includes in <head>
 # ------------------
 

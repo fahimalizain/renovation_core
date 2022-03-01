@@ -1,0 +1,6 @@
+
+from {app_name}.models.{scrubbed_doctype}.{scrubbed_doctype} import {classname} as _{classname}
+
+
+class {classname}(_{classname}):
+    pass
