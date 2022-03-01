@@ -94,7 +94,7 @@ class FrappeModel(Generic[T], Document):
 
     @classmethod
     async def exists(cls, doc_id: str):
-        return asyncer.asyncify(frappe.db.exists)(cls.get_doctype(), doc_id)
+        return await asyncer.asyncify(frappe.db.exists)(cls.get_doctype(), doc_id)
 
     async def reload(self) -> T:
         super().reload()
@@ -295,7 +295,7 @@ class FrappeModel(Generic[T], Document):
             method = f.__name__
             doc_events = frappe.get_doc_hooks()
             for handler in doc_events.get(self.doctype, {}).get(method, []) \
-                    + doc_events.get("*", {}).get(method, []):
+                           + doc_events.get("*", {}).get(method, []):
                 hooks.append(frappe.get_attr(handler))
 
             composed = compose(f, *hooks)
