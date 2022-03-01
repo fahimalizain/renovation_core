@@ -1,7 +1,7 @@
 import os
 
 import frappe
-from itsdangerous import json
+import json
 
 
 def load_renovation_app_info():
@@ -12,7 +12,7 @@ def load_renovation_app_info():
         frappe_app_map=frappe._dict()
     )
 
-    for app in frappe.get_all_apps(with_internal_apps=False, sites_path=os.getcwd()):
+    for app in frappe.get_installed_apps():
         renovation_app = getattr(frappe.get_module(app + ".hooks"), "renovation_app", None)
         if not renovation_app:
             continue
