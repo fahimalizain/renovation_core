@@ -1,5 +1,5 @@
 from todo_app.api import router
-import todo_app.controllers as todo_controllers
+import todo_app.controllers.todo as todo_controllers
 
 
 @router.put("/edit-todo/{todo_name}/")
