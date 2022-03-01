@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 import frappe
 from .frappehandler import FrappeMiddleware
+from .utils.app import load_renovation_app_info
 
 
 def get_app():
@@ -18,35 +19,12 @@ def get_app():
             "settings": settings.as_dict(),
         }
 
-    renovation_apps = []
-    # Load Frappe ORMs
-    for app in frappe.get_all_apps(with_internal_apps=False, sites_path=os.getcwd()):
-        renovation_app = getattr(frappe.get_module(app + ".hooks"), "renovation_app", None)
-        if not renovation_app:
-            continue
-
-        frappe.get_module(renovation_app)
-        renovation_apps.append(renovation_app)
-        for module in frappe.get_module_list(app):
-            module = frappe.scrub(module)
-            module_path = frappe.get_pymodule_path(app, module)
-            doctypes_path = os.path.join(module_path, "doctype")
-            if not os.path.exists(doctypes_path):
-                continue
-
-            for doctype in os.listdir(doctypes_path):
-                if not os.path.isdir(os.path.join(doctypes_path, doctype)):
-                    continue
-                doctype_json = os.path.join(doctypes_path, doctype, doctype + ".json")
-                if not os.path.exists(doctype_json):
-                    continue
-
-                doctype_module = f"{app}.{module}.doctype.{doctype}.{doctype}"
-                print("Importing ", doctype_module)
-                frappe.get_module(doctype_module)
+    frappe.init(site=os.environ.get("SITE_NAME", "test.localhost"))
+    info = load_renovation_app_info()
+    frappe.destroy()
 
     # Load Renovation App Routers
-    for app in renovation_apps:
+    for app in info.apps:
         router = getattr(frappe.get_module(f"{app}.api"), "router", None)
         if router:
             fastapi_app.include_router(router)
