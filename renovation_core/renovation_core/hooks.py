@@ -9,6 +9,11 @@ app_color = "grey"
 app_email = "fahimalizain@gmail.com"
 app_license = "MIT"
 
+doc_events = {
+    "DocType": {
+        "on_update": "renovation_core.docevents.doctype.on_update"
+    }
+}
 # Includes in <head>
 # ------------------
 

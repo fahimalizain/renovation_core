@@ -1,7 +1,7 @@
 
 from renovation import _
 from pms_app.properties.exceptions import PropertyTypeNotFound
-from pms_app.properties.models.property_type import PropertyType
+from pms_app.properties.models.property_type.property_type import PropertyType
 
 
 async def delete_property_type(name: str):

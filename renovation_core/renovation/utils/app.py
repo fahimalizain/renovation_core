@@ -58,7 +58,31 @@ def get_renovation_app_info():
 
 def get_renovation_apps():
     info = get_renovation_app_info()
+    if not info:
+        return []
     return info.apps
+
+
+def is_renovation_frappe_app(frappe_app: str):
+    info = get_renovation_app_info()
+    if not info:
+        return False
+
+    frappe_apps = info.frappe_app_map.values()
+    return frappe_app in frappe_apps
+
+
+def get_renovation_app_of_frappe_app(frappe_app: str):
+    info = get_renovation_app_info()
+    if not info:
+        return None
+
+    for app, _frappe_app in info.frappe_app_map.items():
+        if _frappe_app != frappe_app:
+            continue
+        return app
+
+    return None
 
 
 def is_renovation_doctype(doctype: str):

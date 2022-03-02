@@ -5,7 +5,7 @@ from .orm import Field, Column  # noqa
 from .model import FrappeModel as RenovationModel  # noqa
 
 # Useful utilities
-from frappe import (local, _, parse_json, _dict, get_module, get_hooks, get_traceback)  # noqa
+from frappe import (local, _, parse_json, _dict, get_module, get_hooks, get_traceback, scrub)  # noqa
 
 
 def get_attr(method_string):

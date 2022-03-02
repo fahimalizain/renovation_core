@@ -1,6 +1,6 @@
 
 from typing import Optional
-from pms_app.properties.models.property_type import PropertyType
+from pms_app.properties.models.property_type.property_type import PropertyType
 
 
 async def create_property_type(

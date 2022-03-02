@@ -1,10 +1,11 @@
 from renovation import RenovationModel, _
+from .property_type_types import PropertyTypeMeta
 
 from pms_app.properties.exceptions import UnitError
 from pms_app.utils import has_table_value_changed
 
 
-class PropertyType(RenovationModel["PropertyType"]):
+class PropertyType(RenovationModel["PropertyType"], PropertyTypeMeta):
     def before_insert(self):
         self.mirror_has_units_status()
 
