@@ -2,7 +2,8 @@
 # For license information, please see license.txt
 
 from renovation.model import map_doctype
-from pms_app.properties.models.unit_attribute_item import UnitAttributeItem as _UnitAttributeItem
+from pms_app.properties.models.unit_attribute_item.unit_attribute_item import \
+    UnitAttributeItem as _UnitAttributeItem
 
 
 map_doctype("Unit Attribute Item", _UnitAttributeItem)

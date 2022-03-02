@@ -1,9 +1,12 @@
+
 from renovation import RenovationModel, _
 from pms_app.properties.exceptions import UnitAttributeError
 from pms_app.utils import has_table_value_changed
 
+from .unit_type_types import UnitTypeMeta
 
-class UnitType(RenovationModel["UnitType"]):
+
+class UnitType(RenovationModel["UnitType"], UnitTypeMeta):
     def validate(self):
         self.validate_unit_attributes()
 
@@ -31,7 +34,7 @@ class UnitType(RenovationModel["UnitType"]):
 
     async def set_linked_units_deactivated(self):
         """Set all Units linked to deactivated"""
-        from .unit import Unit
+        from ..unit.unit import Unit
         linked_units = await Unit.get_all(
             filters=[["unit_type", "=", self.name]]
         )
@@ -42,7 +45,7 @@ class UnitType(RenovationModel["UnitType"]):
             await unit.save()
 
     async def propagate_changes_to_linked_unit_instances(self):
-        from .unit import Unit
+        from ..unit.unit import Unit
 
         changes = has_table_value_changed(self, "unit_attributes")
         if changes:

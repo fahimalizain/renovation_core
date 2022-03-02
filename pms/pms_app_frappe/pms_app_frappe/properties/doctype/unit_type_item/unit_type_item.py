@@ -3,7 +3,7 @@
 
 from renovation.model import map_doctype
 # from pms_app.properties.exceptions import UnitTypeNotFound
-from pms_app.properties.models.unit_type_item import UnitTypeItem as _UnitTypeItem
+from pms_app.properties.models.unit_type_item.unit_type_item import UnitTypeItem as _UnitTypeItem
 
 map_doctype("Unit Type Item", _UnitTypeItem)
 

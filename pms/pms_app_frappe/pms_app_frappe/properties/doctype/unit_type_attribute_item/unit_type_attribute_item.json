@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2021-12-27 06:26:20.419684",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "title",
@@ -45,7 +46,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-01-02 14:16:11.123155",
+ "modified": "2022-03-02 14:41:56.997816",
  "modified_by": "Administrator",
  "module": "Properties",
  "name": "Unit Type Attribute Item",

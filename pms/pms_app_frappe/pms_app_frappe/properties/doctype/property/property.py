@@ -2,7 +2,7 @@
 # For license information, please see license.txt
 
 from renovation.model import map_doctype
-from pms_app.properties.models.property import Property as _Property
+from pms_app.properties.models.property.property import Property as _Property
 
 
 map_doctype("Property", _Property)

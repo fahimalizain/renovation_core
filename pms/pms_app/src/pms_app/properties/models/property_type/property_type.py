@@ -48,7 +48,7 @@ class PropertyType(RenovationModel["PropertyType"], PropertyTypeMeta):
         Propagate 'enabled' status to all linked Properties
         Remove Units from any linked Properties if Units have unsupported Unit Type
         """
-        from .property import Property
+        from ..property.property import Property
 
         enabled_changes = self.has_value_changed("enabled") and self.enabled == 0
 

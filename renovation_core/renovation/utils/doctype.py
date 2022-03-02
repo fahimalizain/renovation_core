@@ -5,6 +5,9 @@ import renovation
 from .app import is_renovation_frappe_app, get_renovation_app_of_frappe_app
 
 
+# TODO: Custom Fields
+# TODO: Table Fields
+
 def on_update(doc, method=None):
     frappe_app = frappe.db.get_value("Module Def", doc.module, "app_name")
     if not is_renovation_frappe_app(frappe_app):

@@ -1,8 +1,11 @@
+
 from renovation import RenovationModel, _
 from pms_app.properties.exceptions import UnitTypeNotFound
 
+from .unit_types import UnitMeta
 
-class Unit(RenovationModel["Unit"]):
+
+class Unit(RenovationModel["Unit"], UnitMeta):
     async def before_insert(self):
         await self.copy_attributes_from_unit_type()
 
@@ -31,7 +34,7 @@ class Unit(RenovationModel["Unit"]):
             self.flags.saving_attributes = False
 
     async def copy_attributes_from_unit_type(self, set_name=False):
-        from .unit_type import UnitType
+        from ..unit_type.unit_type import UnitType
 
         unit_type = await UnitType.get_doc(self.unit_type)
         for type_attribute in unit_type.unit_attributes:
@@ -57,7 +60,7 @@ class Unit(RenovationModel["Unit"]):
 
     async def validate_enabled_unit_type(self):
         """Validate that only an enabled Unit Type can be added, if self is set to active"""
-        from .unit_type import UnitType
+        from ..unit_type.unit_type import UnitType
         unit_type = await UnitType.get_doc(self.unit_type)
 
         if not unit_type.enabled and self.active:
@@ -76,7 +79,7 @@ class Unit(RenovationModel["Unit"]):
 
     async def update_property_unit_items(self):
         """Update the Unit Items on Properties containing this Unit"""
-        from .unit_item import UnitItem
+        from ..unit_item.unit_item import UnitItem
         linked_unit_items = await UnitItem.get_all(
             filters=[["unit", "=", self.name]]
         )

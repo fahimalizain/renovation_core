@@ -1,9 +1,12 @@
+
 from renovation import RenovationModel, _
 from pms_app.properties.exceptions import UnitAttributeError
 from pms_app.utils.numbers import is_number
 
+from .unit_type_attribute_item_types import UnitTypeAttributeItemMeta
 
-class UnitTypeAttributeItem(RenovationModel["UnitTypeAttributeItem"]):
+
+class UnitTypeAttributeItem(RenovationModel["UnitTypeAttributeItem"], UnitTypeAttributeItemMeta):
     def validate_select_options(self):
         """Validate Select Options for the attribute"""
 

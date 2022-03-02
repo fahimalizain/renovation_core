@@ -1,13 +1,16 @@
+
 from renovation import RenovationModel, _
 
 from pms_app.properties.exceptions import UnitAttributeError
 from pms_app.utils.numbers import is_number
 
-from .unit_type import UnitType
-from .unit_type_attribute_item import UnitTypeAttributeItem
+from ..unit_type.unit_type import UnitType
+from ..unit_type_attribute_item.unit_type_attribute_item import UnitTypeAttributeItem
+
+from .unit_attribute_item_types import UnitAttributeItemMeta
 
 
-class UnitAttributeItem(RenovationModel["UnitAttributeItem"]):
+class UnitAttributeItem(RenovationModel["UnitAttributeItem"], UnitAttributeItemMeta):
     async def validate_unit_attribute_on_linked_unit_type(self, parent):
         """Validate that all attributes exist on the liked Unit Type"""
 

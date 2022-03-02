@@ -1,9 +1,11 @@
+
 from renovation import RenovationModel, _
+from .property_types import PropertyMeta
 
 from pms_app.properties.exceptions import PropertyTypeNotEnabled, UnitError, UnitItemError
 
 
-class Property(RenovationModel["Property"]):
+class Property(RenovationModel["Property"], PropertyMeta):
     async def validate(self):
 
         await self.validate_property_type()
@@ -17,7 +19,7 @@ class Property(RenovationModel["Property"]):
 
     async def validate_property_type(self):
         """Validate that if self is active, only enabled Property Types can be added"""
-        from .property_type import PropertyType
+        from ..property_type.property_type import PropertyType
 
         if self.active:
             property_type = await PropertyType.get_doc(self.property_type)
@@ -30,7 +32,7 @@ class Property(RenovationModel["Property"]):
 
     async def validate_unique_unit(self, unit_item):
         """Validate that a Unit can only exist on one Property"""
-        from .unit_item import UnitItem
+        from ..unit_item.unit_item import UnitItem
 
         unit_items = await UnitItem.get_all(
             filters=[
@@ -49,7 +51,7 @@ class Property(RenovationModel["Property"]):
 
     async def validate_unit_type_of_unit(self, unit_item):
         """Validate that only Units with Unit Types that exist on the Property Type are allowed"""
-        from .property_type import PropertyType
+        from ..property_type.property_type import PropertyType
         property_type_doc = await PropertyType.get_doc(self.property_type)
 
         supported_unit_types = set([

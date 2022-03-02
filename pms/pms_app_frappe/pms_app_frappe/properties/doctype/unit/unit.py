@@ -2,7 +2,7 @@
 # For license information, please see license.txt
 
 from renovation.model import map_doctype
-from pms_app.properties.models.unit import Unit as _Unit
+from pms_app.properties.models.unit.unit import Unit as _Unit
 
 map_doctype("Unit", _Unit)
 

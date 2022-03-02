@@ -7,7 +7,7 @@
 # from pms_app.properties.exceptions import UnitAttributeError
 # from pms_app.utils.doc_utils import has_table_value_changed
 from renovation.model import map_doctype
-from pms_app.properties.models.unit_type import UnitType as _UnitType
+from pms_app.properties.models.unit_type.unit_type import UnitType as _UnitType
 
 
 map_doctype("Unit Type", _UnitType)
