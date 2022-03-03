@@ -14,7 +14,8 @@ doc_events = {
         "on_update": "renovation_core.docevents.doctype.on_update"
     },
     "Custom Field": {
-        "on_change": "renovation_core.docevents.doctype.on_custom_field_update"
+        "on_update": "renovation_core.docevents.doctype.on_custom_field_update",
+        "after_delete": "renovation_core.docevents.doctype.on_custom_field_update"
     }
 }
 # Includes in <head>
