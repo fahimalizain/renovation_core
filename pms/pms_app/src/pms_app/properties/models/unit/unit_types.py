@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import List, Optional
+from pms_app.properties.models.unit_attribute_item.unit_attribute_item import UnitAttributeItem
 
 
 class UnitMeta:
@@ -8,4 +9,4 @@ class UnitMeta:
     description: Optional[str]
     unit_type: str
     size: Optional[float]
-    # unit_attributes: List[UnitAttributeItem]
+    unit_attributes: List[UnitAttributeItem]

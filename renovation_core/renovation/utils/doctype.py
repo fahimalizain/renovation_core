@@ -2,7 +2,7 @@ import os
 import frappe
 
 import renovation
-from .app import is_renovation_frappe_app, get_renovation_app_of_frappe_app
+from .app import is_renovation_frappe_app, get_renovation_app_of_frappe_app, is_renovation_doctype
 
 
 # TODO: Table Fields
@@ -38,8 +38,6 @@ def make_updates(
         "models",
         renovation.scrub(doctype_doc.name)
     )
-    r_dt_module = f"{renovation_app}.{renovation.scrub(doctype_doc.module)}.models." + \
-        f"{renovation.scrub(doctype_doc.name)}.{renovation.scrub(doctype_doc.name)}"
 
     os.makedirs(r_dt_folder, exist_ok=True)
 
@@ -53,7 +51,7 @@ def make_updates(
 
     # Update frappe controller
     if frappe_controller:
-        handle_frappe_controller(doctype_doc, r_dt_module=r_dt_module)
+        handle_frappe_controller(doctype_doc)
 
 
 def generate_types(doc, r_dt_folder):
@@ -77,17 +75,20 @@ def generate_types(doc, r_dt_folder):
             return
 
         reqd = df.reqd
-        df_wip = False  # DF Work In Progress
+        df_comment = False  # DF Work In Progress
         _type = "str"
         if df.fieldtype in numeric_fieldtypes:
             _type = "float" if df.fieldtype in ("Currency", "Float", "Percent") else "int"
         elif df.fieldtype in table_fields:
-            # TODO: Table
-            df_wip = True
             reqd = True
-            # _add_import("typing", "List")
-            # _add_import(" .. path to child doc .. ")
-            _type = f"List[{df.options.replace(' ', '')}]"
+            if not is_renovation_doctype(df.options):
+                df_comment = True
+            else:
+                _add_import("typing", "List")
+                child_module = get_r_dt_module(df.options)
+                child_class = df.options.replace(' ', '')
+                _add_import(child_module, child_class)
+                _type = f"List[{child_class}]"
         else:
             _type = "str"
 
@@ -95,7 +96,7 @@ def generate_types(doc, r_dt_folder):
             _add_import("typing", "Optional")
             _type = f"Optional[{_type}]"
 
-        _py += f"\n    {'# 'if df_wip else ''}{df.fieldname}: {_type}"
+        _py += f"\n    {'# 'if df_comment else ''}{df.fieldname}: {_type}"
 
     for df in doc.fields:
         _add_df(df)
@@ -137,7 +138,7 @@ class {dt_title_case}(RenovationModel["{dt_title_case}"], {dt_title_case}Meta):
         f.write(py_content)
 
 
-def handle_frappe_controller(doc, r_dt_module):
+def handle_frappe_controller(doc):
     from frappe.model.document import get_controller
     target_file = renovation.get_module(get_controller(doc.name).__module__).__file__
     with open(target_file, "r") as f:
@@ -147,6 +148,8 @@ def handle_frappe_controller(doc, r_dt_module):
     if f"class {dt_title}(_{dt_title}):" in file_content:
         # Assume all good
         return
+
+    r_dt_module = get_r_dt_module(doc.name)
 
     file_content = file_content.replace(
         "from frappe.model.document import Document",
@@ -163,3 +166,17 @@ class {dt_title}(_{dt_title}):"""
 
     with open(target_file, "w") as f:
         f.write(file_content)
+
+
+def get_r_dt_module(doctype: str):
+    if not is_renovation_doctype(doctype):
+        return None
+
+    module = frappe.db.get_value("DocType", doctype, "module")
+    frappe_app = frappe.db.get_value("Module Def", module, "app_name")
+    renovation_app = get_renovation_app_of_frappe_app(frappe_app)
+
+    r_dt_module = f"{renovation_app}.{renovation.scrub(module)}.models." + \
+        f"{renovation.scrub(doctype)}.{renovation.scrub(doctype)}"
+
+    return r_dt_module

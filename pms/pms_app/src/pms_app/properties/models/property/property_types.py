@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Optional, List
+from pms_app.properties.models.unit_item.unit_item import UnitItem
 
 
 class PropertyMeta:
@@ -9,4 +10,4 @@ class PropertyMeta:
     address: Optional[str]
     city: Optional[str]
     beneficiary: str
-    # units: List[UnitItem]
+    units: List[UnitItem]
