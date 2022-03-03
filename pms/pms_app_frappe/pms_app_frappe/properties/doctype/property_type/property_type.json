@@ -10,8 +10,7 @@
   "enabled",
   "title",
   "has_units",
-  "unit_types",
-  "car"
+  "unit_types"
  ],
  "fields": [
   {
@@ -38,17 +37,11 @@
    "fieldtype": "Table",
    "label": "Unit Types",
    "options": "Unit Type Item"
-  },
-  {
-   "default": "0",
-   "fieldname": "car",
-   "fieldtype": "Check",
-   "label": "Car"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-02 12:10:43.895126",
+ "modified": "2022-03-03 09:54:23.453184",
  "modified_by": "Administrator",
  "module": "Properties",
  "name": "Property Type",

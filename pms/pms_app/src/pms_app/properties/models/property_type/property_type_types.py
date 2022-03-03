@@ -6,4 +6,4 @@ class PropertyTypeMeta:
     title: str
     has_units: Optional[int]
     # unit_types: List[UnitTypeItem]
-    car: Optional[int]
+

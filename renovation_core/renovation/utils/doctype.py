@@ -5,11 +5,27 @@ import renovation
 from .app import is_renovation_frappe_app, get_renovation_app_of_frappe_app
 
 
-# TODO: Custom Fields
 # TODO: Table Fields
 
-def on_update(doc, method=None):
-    frappe_app = frappe.db.get_value("Module Def", doc.module, "app_name")
+def on_doctype_update(doc, method=None):
+    make_updates(doctype_doc=doc)
+
+
+def on_custom_field_update(doc, method=None):
+    doctype_doc = frappe.get_doc("DocType", doc.dt)
+    make_updates(
+        doctype_doc=doctype_doc,
+        _types=True,
+        renovation_controller=False,
+        frappe_controller=False)
+
+
+def make_updates(
+        doctype_doc,
+        _types=True,
+        renovation_controller=True,
+        frappe_controller=True):
+    frappe_app = frappe.db.get_value("Module Def", doctype_doc.module, "app_name")
     if not is_renovation_frappe_app(frappe_app):
         return
 
@@ -18,21 +34,26 @@ def on_update(doc, method=None):
     # Renovation Target Folder:
     r_dt_folder = os.path.join(
         os.path.dirname(renovation.get_module(renovation_app).__file__),
-        renovation.scrub(doc.module),
+        renovation.scrub(doctype_doc.module),
         "models",
-        renovation.scrub(doc.name)
+        renovation.scrub(doctype_doc.name)
     )
-    r_dt_module = f"{renovation_app}.{renovation.scrub(doc.module)}.models." + \
-        f"{renovation.scrub(doc.name)}.{renovation.scrub(doc.name)}"
+    r_dt_module = f"{renovation_app}.{renovation.scrub(doctype_doc.module)}.models." + \
+        f"{renovation.scrub(doctype_doc.name)}.{renovation.scrub(doctype_doc.name)}"
 
     os.makedirs(r_dt_folder, exist_ok=True)
 
     # Make typed meta class
-    generate_types(doc, r_dt_folder)
+    if _types:
+        generate_types(doctype_doc, r_dt_folder)
+
     # Make renovation controller
-    handle_renovation_controller(doc, r_dt_folder)
+    if renovation_controller:
+        handle_renovation_controller(doctype_doc, r_dt_folder)
+
     # Update frappe controller
-    handle_frappe_controller(doc, r_dt_module=r_dt_module)
+    if frappe_controller:
+        handle_frappe_controller(doctype_doc, r_dt_module=r_dt_module)
 
 
 def generate_types(doc, r_dt_folder):
@@ -49,9 +70,11 @@ def generate_types(doc, r_dt_folder):
 
     _py = f"class {doc.name.replace(' ', '')}Meta:"
 
-    for df in doc.fields:
+    def _add_df(df):
+        nonlocal _py
+
         if df.fieldtype in display_fieldtypes:
-            continue
+            return
 
         reqd = df.reqd
         df_wip = False  # DF Work In Progress
@@ -73,6 +96,15 @@ def generate_types(doc, r_dt_folder):
             _type = f"Optional[{_type}]"
 
         _py += f"\n    {'# 'if df_wip else ''}{df.fieldname}: {_type}"
+
+    for df in doc.fields:
+        _add_df(df)
+
+    custom_fields = frappe.get_all("Custom Field", {"dt": doc.name}, ["*"])
+    if len(custom_fields):
+        _py += "\n\n    # Custom Fields"
+        for df in custom_fields:
+            _add_df(df)
 
     if imports:
         _imports = ""
