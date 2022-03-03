@@ -1,12 +1,11 @@
 from todo_app.models.fulfillment_workflow import FulfillmentWorkflow
-from todo_app.models.order_workflow import OrderWorkflow
 
 
-async def fulfill_order(order_name, items):
-    order_doc = await OrderWorkflow.get_doc(order_name)
-    await order_doc.fulfiill_order(items)
-    fulfillment = await FulfillmentWorkflow.exists({"order": order_doc.name})
-    fulfillment_doc = await FulfillmentWorkflow.get_doc(fulfillment)
+async def item_out_for_delivery(fulfillment_name, fulfillment_line):
+    fulfillment_doc = await FulfillmentWorkflow.get_doc(fulfillment_name)
+    resp = await fulfillment_doc.fulfillment_line_out_for_delivery(fulfillment_line)
+    order_doc = resp.get("order_doc")
+    fulfillment_doc = resp.get("fulfillment_doc")
     return {
         "name": order_doc.name,
         "status": order_doc.order_workflow_state,

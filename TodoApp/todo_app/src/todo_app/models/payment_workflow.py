@@ -8,14 +8,20 @@ class PaymentWorkflow(RenovationModel["PaymentWorkflow"], PaymentWorkflowMachine
     wf_state = "payment_workflow"
     wf_date = "payment_workflow_date"
 
-    async def mark_as_paid(self):
-        return await self._mark_as_paid()
+    async def add_payment(self):
+        return await self._add_payment()
 
     async def is_fully_charged(self, *args, **kwargs):
         from todo_app.models.order_workflow import OrderWorkflow
         doc = await OrderWorkflow.get_doc(self.get("order"))
         order_grand_total = doc.grand_total
         return self.get("paid_amount") >= order_grand_total
+
+    async def is_not_fully_charged(self, *args, **kwargs):
+        from todo_app.models.order_workflow import OrderWorkflow
+        doc = await OrderWorkflow.get_doc(self.get("order"))
+        order_grand_total = doc.grand_total
+        return order_grand_total > self.get("paid_amount")
 
     async def submit_order(self, *args, **kwargs):
         from todo_app.models.order_workflow import OrderWorkflow

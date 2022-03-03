@@ -12,7 +12,9 @@
   "order_workflow_date",
   "section_break_5",
   "order_name",
-  "grand_total"
+  "grand_total",
+  "section_break_8",
+  "order_workflow_items"
  ],
  "fields": [
   {
@@ -25,7 +27,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Order Workflow State",
-   "options": "Draft\nUnconfirmed\nUnfulfilled\nFulfilled\nCancelled",
+   "options": "Draft\nUnconfirmed\nUnfulfilled\nPartially Fulfilled\nFulfilled\nCancelled",
    "read_only": 1,
    "reqd": 1
   },
@@ -56,11 +58,22 @@
    "label": "Grand Total",
    "reqd": 1,
    "set_only_once": 1
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "order_workflow_items",
+   "fieldtype": "Table",
+   "label": "Order Workflow Items",
+   "options": "Order Workflow Item",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-01 10:39:52.463748",
+ "modified": "2022-03-02 09:25:55.396495",
  "modified_by": "Administrator",
  "module": "Todo App Frappe",
  "name": "Order Workflow",
