@@ -5,8 +5,6 @@ import renovation
 from .app import is_renovation_frappe_app, get_renovation_app_of_frappe_app, is_renovation_doctype
 
 
-# TODO: Table Fields
-
 def on_doctype_update(doc, method=None):
     make_updates(doctype_doc=doc)
 
