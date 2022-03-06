@@ -1,6 +1,8 @@
 
 __version__ = '0.0.1'
 
+from werkzeug.local import LocalProxy
+
 from .orm import Field, Column  # noqa
 from .model import FrappeModel as RenovationModel  # noqa
 
@@ -17,3 +19,6 @@ def get_attr(method_string):
     modulename = '.'.join(method_string.split('.')[:-1])
     methodname = method_string.split('.')[-1]
     return getattr(get_module(modulename), methodname)
+
+
+user = LocalProxy(lambda: local.session.user)
