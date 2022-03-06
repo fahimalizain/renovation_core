@@ -196,8 +196,8 @@ class FrappeModel(Generic[T], Document):
         super().update(d)
         return self
 
-    async def delete(self) -> None:
-        await asyncer.asyncify(super().delete)()
+    async def delete(self, ignore_permissions=False) -> None:
+        await asyncer.asyncify(super().delete)(ignore_permissions=ignore_permissions)
         return None
 
     async def run_before_save_methods(self):
