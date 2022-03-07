@@ -28,7 +28,7 @@ class Unit(RenovationModel["Unit"], UnitMeta):
 
             await self.copy_attributes_from_unit_type(set_name=True)
             self.validate_unit_attributes()  # Run previously ignored validation
-            self.save()
+            await self.save()
 
         if self.flags.saving_attributes:
             self.flags.saving_attributes = False
