@@ -74,7 +74,7 @@ class FrappeModel(Generic[T], Document):
     @classmethod
     async def get_all(cls,
                       filters: dict,
-                      fields: List[str],
+                      fields: List[str] = ["name"],
                       offset: int = 0,
                       count: int = 10) -> List[T]:
         return await asyncer.asyncify(frappe.get_all)(
@@ -247,13 +247,12 @@ class FrappeModel(Generic[T], Document):
             del kwargs["flags"]
 
         if hasattr(self, method) and hasattr(getattr(self, method), "__call__"):
-            fn = lambda self, *args, **kwargs: getattr(self, method)(*args, **kwargs)  # noqa
+            fn = getattr(self, method)
         else:
             # hack! to run hooks even if method does not exist
             fn = lambda self, *args, **kwargs: None  # noqa
 
-        fn.__name__ = str(method)
-        hooked = FrappeModel.hook(fn)
+        hooked = FrappeModel.hook(fn, method=method)
         out = await hooked(self, *args, **kwargs)
 
         # self.run_notifications(method)
@@ -261,7 +260,7 @@ class FrappeModel(Generic[T], Document):
         return out
 
     @staticmethod
-    def hook(f):
+    def hook(f, method):
         """Decorator: Make method `hookable` (i.e. extensible by another app).
 
         Note: If each hooked method returns a value (dict), then all returns are
@@ -277,18 +276,26 @@ class FrappeModel(Generic[T], Document):
             else:
                 self._return_value = new_return_value or self.get("_return_value")
 
+        def _run_async_bound(self, fn):
+            async def _inner(*args, **kwargs):
+                if not getattr(fn, "__self__", None):
+                    args = [self] + list(args)
+
+                if inspect.iscoroutinefunction(fn):
+                    return await fn(*args, **kwargs)
+                else:
+                    return fn(*args, **kwargs)
+
+            return _inner
+
         def compose(fn, *hooks):
             async def runner(self, method, *args, **kwargs):
-                if inspect.isawaitable(fn):
-                    add_to_return_value(self, await fn(self, *args, **kwargs))
-                else:
-                    add_to_return_value(self, fn(self, *args, **kwargs))
+                add_to_return_value(self, await _run_async_bound(self, fn)(*args, **kwargs))
 
                 for f in hooks:
-                    if inspect.isawaitable(f):
-                        add_to_return_value(self, await f(self, method, *args, **kwargs))
-                    else:
-                        add_to_return_value(self, f(self, method, *args, **kwargs))
+                    add_to_return_value(
+                        self,
+                        await _run_async_bound(self, f)(method, *args, **kwargs))
 
                 return self._return_value
 
@@ -296,7 +303,7 @@ class FrappeModel(Generic[T], Document):
 
         def composer(self, *args, **kwargs):
             hooks = []
-            method = f.__name__
+
             doc_events = frappe.get_doc_hooks()
             for handler in doc_events.get(self.doctype, {}).get(method, []) \
                     + doc_events.get("*", {}).get(method, []):
