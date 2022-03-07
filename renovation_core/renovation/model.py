@@ -81,6 +81,7 @@ class FrappeModel(Generic[T], Document):
             cls.get_doctype(), filters=filters, fields=fields, limit_start=offset,
             limit_page_length=count)
 
+    @classmethod
     async def db_set_value(cls, doc_id: str, fieldname: str, value):
         return await asyncer.asyncify(frappe.db.set_value)(
             cls.get_doctype(), doc_id, fieldname, value)

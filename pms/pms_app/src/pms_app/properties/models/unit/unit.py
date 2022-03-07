@@ -13,7 +13,7 @@ class Unit(RenovationModel["Unit"], UnitMeta):
 
         await self.validate_enabled_unit_type()
         if self.flags.in_insert:
-            self.validate_unit_attributes()  # For save(), validate separately
+            await self.validate_unit_attributes()  # For save(), validate separately
 
     async def on_change(self):
 
@@ -27,7 +27,7 @@ class Unit(RenovationModel["Unit"], UnitMeta):
             self.flags.saving_attributes = True
 
             await self.copy_attributes_from_unit_type(set_name=True)
-            self.validate_unit_attributes()  # Run previously ignored validation
+            await self.validate_unit_attributes()  # Run previously ignored validation
             await self.save()
 
         if self.flags.saving_attributes:
@@ -70,11 +70,11 @@ class Unit(RenovationModel["Unit"], UnitMeta):
                 ).format(unit_type.name)
             )
 
-    def validate_unit_attributes(self):
+    async def validate_unit_attributes(self):
         """Validate the list of Unit Attributes"""
 
         for attribute in self.unit_attributes:
-            attribute.validate_unit_attribute_on_linked_unit_type(self)
+            await attribute.validate_unit_attribute_on_linked_unit_type(self)
             attribute.validate_unit_attribute_value_type()
 
     async def update_property_unit_items(self):
