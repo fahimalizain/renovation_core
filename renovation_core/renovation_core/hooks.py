@@ -18,6 +18,13 @@ doc_events = {
         "after_delete": "renovation_core.docevents.doctype.on_custom_field_update"
     }
 }
+
+before_tests = "renovation_core.hooks._before_tests"
+
+
+def _before_tests():
+    from renovation.utils.app import load_renovation_app_info
+    load_renovation_app_info()
 # Includes in <head>
 # ------------------
 
@@ -95,6 +102,7 @@ doc_events = {
 # DocType Class
 # ---------------
 # Override standard doctype classes
+
 
 override_doctype_class = {
     # "DocType": "renovation."
