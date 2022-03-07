@@ -105,7 +105,7 @@ class FrappeModel(Generic[T], Document):
 
     @classmethod
     async def exists(cls, doc_id: str):
-        return asyncer.asyncify(frappe.db.exists)(cls.get_doctype(), doc_id)
+        return await asyncer.asyncify(frappe.db.exists)(cls.get_doctype(), doc_id)
 
     async def reload(self) -> T:
         super().reload()
