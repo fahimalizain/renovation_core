@@ -87,6 +87,12 @@ class FrappeModel(Generic[T], Document):
             cls.get_doctype(), doc_id, fieldname, value)
 
     @classmethod
+    async def db_get_value(cls, doc_id: str, fieldname: str):
+        return await asyncer.asyncify(frappe.db.get_value)(
+            cls.get_doctype(), doc_id, fieldname
+        )
+
+    @classmethod
     def query(cls,
               query: str,
               values: Union[dict, tuple, list],

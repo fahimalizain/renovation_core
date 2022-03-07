@@ -9,10 +9,10 @@ class PropertyType(RenovationModel["PropertyType"], PropertyTypeMeta):
     def before_insert(self):
         self.mirror_has_units_status()
 
-    def validate(self):
+    async def validate(self):
 
         self.validate_minimum_units()
-        self.validate_unit_types()
+        await self.validate_unit_types()
 
     async def on_update(self):
 
@@ -31,11 +31,10 @@ class PropertyType(RenovationModel["PropertyType"], PropertyTypeMeta):
                 )
             )
 
-    def validate_unit_types(self):
+    async def validate_unit_types(self):
 
         for unit_type_item in self.unit_types:
-
-            unit_type_item.validate_unit_type_enabled()
+            await unit_type_item.validate_unit_type_enabled()
 
     def mirror_has_units_status(self):
         """If Has Units is not selected, remove all Unit Types"""
