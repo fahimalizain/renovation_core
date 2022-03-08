@@ -1,5 +1,5 @@
 from renovation import _
-from pms_app.properties.models.unit_type import UnitType
+from pms_app.properties.models import UnitType
 from pms_app.properties.exceptions import UnitTypeNotFound
 
 

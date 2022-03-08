@@ -1,5 +1,5 @@
 from typing import Optional
-from pms_app.properties.models.unit_type import UnitType
+from pms_app.properties.models import UnitType
 
 
 async def create_unit_type(
