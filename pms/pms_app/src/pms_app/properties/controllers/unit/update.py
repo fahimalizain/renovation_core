@@ -1,6 +1,6 @@
 from renovation import _
 from pms_app.properties.exceptions import UnitNotFound
-from pms_app.properties.models.unit import Unit
+from pms_app.properties.models import Unit
 
 
 async def update_unit(name: str, input):

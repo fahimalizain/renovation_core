@@ -1,5 +1,5 @@
 from typing import Optional
-from pms_app.properties.models.unit import Unit
+from pms_app.properties.models import Unit
 
 
 async def create_unit(
@@ -24,6 +24,6 @@ async def create_unit(
         size=size,
         unit_attributes=unit_attributes
     ))
-    await Unit.insert()
+    await doc.insert()
 
     return doc
