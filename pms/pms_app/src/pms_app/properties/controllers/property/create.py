@@ -2,7 +2,7 @@
 from typing import Optional
 import renovation
 
-from pms_app.properties.models.property import Property
+from pms_app.properties.models import Property
 
 
 async def create_property(

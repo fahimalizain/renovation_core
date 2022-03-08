@@ -1,7 +1,7 @@
 
 from renovation import _
 from pms_app.properties.exceptions import PropertyNotFound
-from pms_app.properties.models.property import Property
+from pms_app.properties.models import Property
 
 
 async def delete_property(name: str):
