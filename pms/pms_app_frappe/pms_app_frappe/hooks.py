@@ -24,6 +24,13 @@ graphql_schema_processors = [
     "pms_app.properties.graphql.bind_resolvers",
 ]
 
+fixtures = [
+    {"dt": "Role", "filters": [["name", "in", [
+        "PMS Manager", "Property Manager", "PMS Contact",
+        "Property Owner", "Tenant", "Service Provider", "Watchman",
+    ]]]}
+]
+
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pms_app_frappe/css/pms_app_frappe.css"
 # app_include_js = "/assets/pms_app_frappe/js/pms_app_frappe.js"
