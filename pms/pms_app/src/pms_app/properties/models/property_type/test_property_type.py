@@ -10,7 +10,7 @@ from renovation.tests import RenovationTestFixture
 from pms_app.properties.models.unit_type.test_unit_type import UnitTypeFixtures
 from pms_app.properties.exceptions import UnitError, UnitTypeNotFound
 from pms_app.properties.models.unit.unit import Unit
-from pms_app.pms_core.models.pms_contact import PMSContact
+from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
 from pms_app.properties.models.property.property import Property
 from pms_app.properties.models.unit_type_item.unit_type_item import UnitTypeItem
 from pms_app.properties.models.unit_type.unit_type import UnitType

@@ -3,6 +3,7 @@ from typing import Union, List, Optional, TypeVar, Generic
 import frappe
 from frappe.model.document import Document
 import asyncer
+import asyncio
 
 T = TypeVar("T")
 
@@ -87,7 +88,7 @@ class FrappeModel(Generic[T], Document):
             cls.get_doctype(), doc_id, fieldname, value)
 
     @classmethod
-    async def db_get_value(cls, doc_id: str, fieldname: str):
+    async def db_get_value(cls, doc_id: str, fieldname: str = "name"):
         return await asyncer.asyncify(frappe.db.get_value)(
             cls.get_doctype(), doc_id, fieldname
         )
@@ -248,7 +249,7 @@ class FrappeModel(Generic[T], Document):
 
         self.latest = None
 
-    async def run_method(self, method, *args, **kwargs):
+    def run_method(self, method, *args, **kwargs):
         """run standard triggers, plus those in hooks"""
         if "flags" in kwargs:
             del kwargs["flags"]
@@ -260,11 +261,15 @@ class FrappeModel(Generic[T], Document):
             fn = lambda self, *args, **kwargs: None  # noqa
 
         hooked = FrappeModel.hook(fn, method=method)
-        out = await hooked(self, *args, **kwargs)
+        try:
+            # Support both sync & async contexts
+            _out = asyncio.create_task(hooked(self, *args, **kwargs))
+        except RuntimeError:
+            _out = asyncer.runnify(hooked)(self, *args, **kwargs)
 
         # self.run_notifications(method)
 
-        return out
+        return _out
 
     @staticmethod
     def hook(f, method):

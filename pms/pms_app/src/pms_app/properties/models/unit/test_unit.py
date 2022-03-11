@@ -6,7 +6,7 @@ from asyncer import runnify
 
 import renovation
 from renovation.tests import RenovationTestFixture
-from pms_app.pms_core.models.pms_contact import PMSContact
+from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
 from pms_app.properties.models.property.property import Property
 from pms_app.properties.models.property_type.property_type import PropertyType
 from pms_app.properties.models.unit_type.test_unit_type import UnitTypeFixtures, UnitType

@@ -2,7 +2,7 @@ from unittest import TestCase
 # from unittest import IsolatedAsyncioTestCase
 from asyncer import runnify
 
-from pms_app.pms_core.models.test_pms_contact import PMSContactFixtures
+from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures
 from .contact import (
     PMSContact,
     add_contact,

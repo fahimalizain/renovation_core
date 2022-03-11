@@ -10,7 +10,7 @@ from renovation.tests import RenovationTestFixture
 from .property import Property
 from pms_app.properties.models.property_type.property_type import PropertyType
 from pms_app.properties.models.property_type.test_property_type import PropertyTypeFixtures
-from pms_app.pms_core.models.test_pms_contact import PMSContactFixtures, PMSContact
+from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures, PMSContact
 from pms_app.properties.models.unit.test_unit import UnitFixtures, Unit
 from pms_app.properties.exceptions import PropertyTypeNotEnabled, UnitError, UnitItemError
 

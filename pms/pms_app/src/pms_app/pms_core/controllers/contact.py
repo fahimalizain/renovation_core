@@ -4,7 +4,7 @@ import frappe
 from frappe.model.base_document import BaseDocument
 
 from pms_app.pms_core import PMSContactNotFound, MissingContactInfo
-from pms_app.pms_core.models.pms_contact import PMSContact
+from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
 from pms_app.utils import PermissionDenied, strip_default_fields
 
 
