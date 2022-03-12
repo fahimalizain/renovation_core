@@ -1,3 +1,4 @@
+import inspect
 from typing import Union, List, Optional, TypeVar, Generic
 
 import frappe
@@ -111,6 +112,28 @@ class FrappeModel(Generic[T], Document):
     async def reload(self) -> T:
         super().reload()
         return self
+
+    # def __getattribute__(self, __name: str):
+    #     # This is an attempt to make the Model compatible in both Sync & Async contexts
+    #     # Right now, this causes db-connection racing condition issues
+    #     # Could be looked into later
+    #     attr = object.__getattribute__(self, __name)
+    #     if not inspect.iscoroutinefunction(attr):
+    #         return attr
+
+    #     def _inner(*args, **kwargs):
+    #         if args and args[0] == self:
+    #             args = args[1:]
+    #         try:
+    #             _out = asyncio.create_task(attr(*args, **kwargs))
+    #         except RuntimeError:
+    #             _out = asyncer.runnify(attr)(*args, **kwargs)
+    #         except BaseException:
+    #             print("Err")
+
+    #         return _out
+
+    #     return _inner
 
     async def insert(self) -> T:
         self.set("__islocal", True)
@@ -278,7 +301,6 @@ class FrappeModel(Generic[T], Document):
         Note: If each hooked method returns a value (dict), then all returns are
         collated in one dict and returned. Ideally, don't return values in hookable
         methods, set properties in the document."""
-        import inspect
 
         def add_to_return_value(self, new_return_value):
             if isinstance(new_return_value, dict):
