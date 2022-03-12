@@ -75,7 +75,7 @@ class FrappeModel(Generic[T], Document):
 
     @classmethod
     async def get_all(cls,
-                      filters: dict,
+                      filters: dict = None,
                       fields: List[str] = ["name"],
                       offset: int = 0,
                       count: int = 10) -> List[T]:

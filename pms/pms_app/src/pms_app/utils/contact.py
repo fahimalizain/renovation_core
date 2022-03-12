@@ -6,7 +6,9 @@ async def get_current_pms_contact():
     if hasattr(renovation.local, "pms_contact"):
         return renovation.local.pms_contact
 
-    contact = await PMSContact.db_get_value({"user": renovation.user}, fieldname=["name", "first_name", ""])
+    contact = await PMSContact.db_get_value(
+        {"user": renovation.user},
+        fieldname=["name", "first_name", "user", "contact_type"])
     if not contact:
         return None
 
