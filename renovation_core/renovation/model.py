@@ -78,10 +78,11 @@ class FrappeModel(Generic[T], Document):
                       filters: dict = None,
                       fields: List[str] = ["name"],
                       offset: int = 0,
-                      count: int = 10) -> List[T]:
+                      count: int = 10,
+                      order_by: str = None) -> List[T]:
         return await asyncer.asyncify(frappe.get_all)(
             cls.get_doctype(), filters=filters, fields=fields, limit_start=offset,
-            limit_page_length=count)
+            limit_page_length=count, order_by=order_by)
 
     @classmethod
     async def db_set_value(cls, doc_id: str, fieldname: str, value):
