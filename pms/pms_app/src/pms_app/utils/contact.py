@@ -17,10 +17,10 @@ async def get_current_pms_contact() -> ActivePMSContact:
 
     contact = await PMSContact.db_get_value(
         {"user": renovation.user},
-        fieldname=["name", "first_name", "user", "contact_type"])
+        fieldname=["name", "first_name", "user", "contact_type"], as_dict=1)
     if not contact:
         return ActivePMSContact()
 
-    contact = ActivePMSContact(contact)
+    contact = ActivePMSContact(**contact)
     renovation.local.pms_contact = contact
     return contact

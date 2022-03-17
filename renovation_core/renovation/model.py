@@ -90,9 +90,9 @@ class FrappeModel(Generic[T], Document):
             cls.get_doctype(), doc_id, fieldname, value)
 
     @classmethod
-    async def db_get_value(cls, doc_id: str, fieldname: str = "name"):
+    async def db_get_value(cls, doc_id: str, fieldname: str = "name", as_dict=None):
         return await asyncer.asyncify(frappe.db.get_value)(
-            cls.get_doctype(), doc_id, fieldname
+            cls.get_doctype(), doc_id, fieldname, as_dict=as_dict
         )
 
     @classmethod
