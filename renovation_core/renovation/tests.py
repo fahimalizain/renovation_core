@@ -318,7 +318,9 @@ class RenovationTestFixture(FrappeTestFixture):
         Goes through each fixture generated and deletes it
         """
         for model, docs in self.fixtures.items():
-            for doc in docs:
+            _docs = list(docs)
+            _docs.reverse()
+            for doc in _docs:
                 if not await model.exists(doc.name) or doc is None:
                     continue
 
