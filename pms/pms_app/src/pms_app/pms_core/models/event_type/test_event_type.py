@@ -11,7 +11,7 @@ class EventTypeTestFixtures(RenovationTestFixture):
         self.DEFAULT_MODEL = EventType
 
     async def make_fixtures(self):
-        docs = make_default_event_types()
+        docs = await make_default_event_types()
         for d in docs:
             self.add_document(d)
 

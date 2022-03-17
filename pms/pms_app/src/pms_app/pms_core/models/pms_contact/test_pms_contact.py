@@ -20,6 +20,27 @@ class PMSContactFixtures(RenovationTestFixture):
         await fixture1.insert()
         self.add_document(fixture1)
 
+        watchman1 = PMSContact(renovation._dict(
+            first_name="W-1",
+            contact_type="Watchman"
+        ))
+        await watchman1.insert()
+        self.add_document(watchman1)
+
+        owner1 = PMSContact(renovation._dict(
+            first_name="Owner-1",
+            contact_type="Property Owner"
+        ))
+        await owner1.insert()
+        self.add_document(owner1)
+
+        tenant1 = PMSContact(renovation._dict(
+            first_name="Tenant-1",
+            contact_type="Tenant"
+        ))
+        await tenant1.insert()
+        self.add_document(tenant1)
+
 
 class TestPMSContact(unittest.TestCase):
     pms_contacts: PMSContactFixtures = PMSContactFixtures()

@@ -1,16 +1,26 @@
 import renovation
-from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
+from typing import TypedDict
 
 
-async def get_current_pms_contact():
+class ActivePMSContact(TypedDict):
+    name: str
+    first_name: str
+    user: str
+    contact_type: str
+
+
+async def get_current_pms_contact() -> ActivePMSContact:
+    from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
+
     if hasattr(renovation.local, "pms_contact"):
-        return renovation.local.pms_contact
+        return ActivePMSContact(renovation.local.pms_contact)
 
     contact = await PMSContact.db_get_value(
         {"user": renovation.user},
         fieldname=["name", "first_name", "user", "contact_type"])
     if not contact:
-        return None
+        return ActivePMSContact()
 
+    contact = ActivePMSContact(contact)
     renovation.local.pms_contact = contact
     return contact
