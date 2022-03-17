@@ -1,5 +1,6 @@
 import unittest
 from asyncer import runnify
+from faker import Faker
 
 import renovation
 from renovation.tests import RenovationTestFixture
@@ -8,35 +9,41 @@ from .pms_contact import PMSContact
 
 class PMSContactFixtures(RenovationTestFixture):
 
-    def __init__(self):
+    def __init__(self, make_users=False):
         super().__init__()
         self.DEFAULT_MODEL = PMSContact
+        self.make_users = make_users
 
     async def make_fixtures(self):
+        f = Faker()
 
         fixture1 = PMSContact(renovation._dict(
-            first_name="Test beneficiary 1"
+            first_name="Test beneficiary 1",
+            email_id=f.email() if self.make_users else None,
         ))
         await fixture1.insert()
         self.add_document(fixture1)
 
         watchman1 = PMSContact(renovation._dict(
             first_name="W-1",
-            contact_type="Watchman"
+            contact_type="Watchman",
+            email_id=f.email() if self.make_users else None,
         ))
         await watchman1.insert()
         self.add_document(watchman1)
 
         owner1 = PMSContact(renovation._dict(
             first_name="Owner-1",
-            contact_type="Property Owner"
+            contact_type="Property Owner",
+            email_id=f.email() if self.make_users else None,
         ))
         await owner1.insert()
         self.add_document(owner1)
 
         tenant1 = PMSContact(renovation._dict(
             first_name="Tenant-1",
-            contact_type="Tenant"
+            contact_type="Tenant",
+            email_id=f.email() if self.make_users else None,
         ))
         await tenant1.insert()
         self.add_document(tenant1)
