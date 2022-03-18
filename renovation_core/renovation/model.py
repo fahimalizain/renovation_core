@@ -136,7 +136,10 @@ class FrappeModel(Generic[T], Document):
 
     #     return _inner
 
-    async def insert(self) -> T:
+    async def insert(self, ignore_permissions=None) -> T:
+        if ignore_permissions is not None:
+            self.flags.ignore_permissions = ignore_permissions
+
         self.set("__islocal", True)
 
         self.check_permission("create")
@@ -190,7 +193,10 @@ class FrappeModel(Generic[T], Document):
 
         return self
 
-    async def save(self) -> T:
+    async def save(self, ignore_permissions=None) -> T:
+        if ignore_permissions is not None:
+            self.flags.ignore_permissions = ignore_permissions
+
         if self.get("__islocal") or not self.get("name"):
             return await self.insert()
 
