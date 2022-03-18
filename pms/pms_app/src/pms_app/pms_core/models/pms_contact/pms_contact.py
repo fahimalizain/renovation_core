@@ -1,9 +1,10 @@
 import re
 from asyncer import asyncify
 from renovation import RenovationModel
+from .pms_contact_types import PMSContactMeta
 
 
-class PMSContact(RenovationModel["PMSContact"]):
+class PMSContact(RenovationModel["PMSContact"], PMSContactMeta):
     async def validate(self):
         await self.update_user()
 

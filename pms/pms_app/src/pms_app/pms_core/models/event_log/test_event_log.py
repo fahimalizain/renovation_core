@@ -1,6 +1,7 @@
 import unittest
 from asyncer import runnify
 from renovation import _dict
+import renovation
 from renovation.tests import RenovationTestFixture
 
 from .event_log import EventLog
@@ -10,14 +11,46 @@ from pms_app.properties.models.unit.test_unit import UnitFixtures, Unit
 
 
 class EventLogFixtures(RenovationTestFixture):
+
+    pms_contacts = PMSContactFixtures(make_users=True)
+
     def __init__(self):
         super().__init__()
         self.DEFAULT_MODEL = EventLog
-        self.dependent_fixtures = [PMSContactFixtures, EventTypeTestFixtures, UnitFixtures]
+        self.dependent_fixtures = [EventTypeTestFixtures, UnitFixtures]
+
+    async def setUp(self, skip_fixtures=False, skip_dependencies=False):
+        await self.pms_contacts.setUp()
+        await super().setUp(skip_fixtures, skip_dependencies)
+        self._dependent_fixture_instances.append(self.pms_contacts)
+
+    async def tearDown(self):
+        await super().tearDown()
+        await self.pms_contacts.tearDown()
 
     async def make_fixtures(self):
         await self.make_watchman_concern()
         await self.make_owner_concern()
+
+    async def delete_fixtures(self):
+        """
+        EventLogs require the created-pms-contact to delete it
+        """
+        original_user = str(renovation.user)
+        for model, docs in self.fixtures.items():
+            _docs = list(docs)
+            _docs.reverse()
+            for doc in _docs:
+                if not await model.exists(doc.name) or doc is None:
+                    continue
+
+                await doc.reload()
+                user = await PMSContact.db_get_value(doc.created_by, "user")
+                renovation.set_user(user)
+                await doc.delete(ignore_permissions=True)
+
+        self.fixtures = renovation._dict()
+        renovation.set_user(original_user)
 
     async def make_watchman_concern(self):
         watchman1 = await PMSContact.db_get_value({"contact_type": "Watchman"})
@@ -124,7 +157,49 @@ class TestEventLog(unittest.TestCase):
         with self.assertRaises(PrimaryEventLogDoNotBelongToCurrentThread):
             await parent_log.save()
 
-    # This particular test case could break the systems on_trash events
+    @runnify
+    async def test_disabled_contact(self):
+        from pms_app.pms_core import PMSContactDisabled
+        contact = self.event_logs.get_dependencies(PMSContact)[0]
+        contact.enabled = 0
+        await contact.save()
+
+        d1 = EventLog(_dict(
+            entity_type=Unit.get_doctype(),
+            entity=self.event_logs.get_dependencies(Unit)[0].name,
+            event_type=EventTypes.CONCERN.value,
+            created_by=contact.name,
+            content="Test Reply 1"
+        ))
+
+        with self.assertRaises(PMSContactDisabled):
+            await d1.save()
+
+        contact.enabled = 1
+        await contact.save()
+
+    @runnify
+    async def test_contact_with_no_user(self):
+        from pms_app.pms_core import PMSContactUserUnavailable
+        contact = self.event_logs.get_dependencies(PMSContact)[0]
+        _user = contact.user
+        await PMSContact.db_set_value(contact.name, "user", None)
+
+        d1 = EventLog(_dict(
+            entity_type=Unit.get_doctype(),
+            entity=self.event_logs.get_dependencies(Unit)[0].name,
+            event_type=EventTypes.CONCERN.value,
+            created_by=contact.name,
+            content="Test Reply 1"
+        ))
+
+        with self.assertRaises(PMSContactUserUnavailable):
+            await d1.save()
+
+        await PMSContact.db_set_value(contact.name, "user", _user)
+        await contact.reload()
+
+    # TODO: This particular test case could break the systems on_trash events
     # We need an async renovation.delete_doc
     # @runnify
     # async def test_set_proper_child_as_primary(self):

@@ -12,6 +12,26 @@ class PMSContactNotFound(PMSException):
         )
 
 
+class PMSContactDisabled(PMSException):
+    def __init__(self, pms_contact: str):
+        self.http_status_code = 400
+        self.error_code = "PMS_CONTACT_DISABLED"
+        self.message = renovation._("PMS Contact has been disabled")
+        self.data = renovation._dict(
+            pms_contact=pms_contact
+        )
+
+
+class PMSContactUserUnavailable(PMSException):
+    def __init__(self, pms_contact: str):
+        self.http_status_code = 400
+        self.error_code = "PMS_CONTACT_USER_UNAVAILABLE"
+        self.message = renovation._("PMS Contact user unavailable")
+        self.data = renovation._dict(
+            pms_contact=pms_contact
+        )
+
+
 class MissingContactInfo(PMSException):
     def __init__(self, message: str = None, data=None):
         self.http_status_code = 400

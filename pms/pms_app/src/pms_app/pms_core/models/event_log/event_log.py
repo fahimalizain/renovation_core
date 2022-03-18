@@ -1,7 +1,10 @@
 
+from pms_app.pms_core.models.pms_contact.pms_contact import PMSContact
 from renovation import RenovationModel
 
 from pms_app.pms_core import (
+    PMSContactDisabled,
+    PMSContactUserUnavailable,
     OnlyLastEventCanBeDeleted,
     OnlyTheCreatorCanDeleteEventLog,
     EventLogParentIsNotRootLog,
@@ -13,6 +16,7 @@ from .event_log_types import EventLogMeta
 
 class EventLog(RenovationModel["EventLog"], EventLogMeta):
     async def validate(self):
+        await self.validate_pms_contact()
         await self.validate_parent_log()
         await self.validate_primary_log()
 
@@ -36,6 +40,14 @@ class EventLog(RenovationModel["EventLog"], EventLogMeta):
         dependant_logs = await EventLog.get_all({"primary_log": self.name})
         for log in dependant_logs:
             await EventLog.db_set_value(log.name, "primary_log", None)
+
+    async def validate_pms_contact(self):
+        pms_contact = await PMSContact.get_doc(self.created_by)
+        if not pms_contact.enabled:
+            raise PMSContactDisabled(pms_contact=self.created_by)
+
+        if not pms_contact.user:
+            raise PMSContactUserUnavailable(pms_contact=pms_contact)
 
     async def validate_parent_log(self):
         if not self.parent_log:

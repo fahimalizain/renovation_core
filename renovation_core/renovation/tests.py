@@ -1,9 +1,12 @@
 import asyncio
 import inspect
+from typing import List, TypeVar
 
 import frappe
 import renovation
 from renovation import RenovationModel
+
+T = TypeVar("T")
 
 
 def _async(fn):
@@ -293,7 +296,7 @@ class RenovationTestFixture(FrappeTestFixture):
 
         self._dependent_fixture_instances = []
 
-    def get_dependencies(self, model: RenovationModel):
+    def get_dependencies(self, model: T) -> List[T]:
         """
         Get documents of specific model that this fixture depends on
         """
