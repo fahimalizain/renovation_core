@@ -347,7 +347,7 @@ class FrappeModel(Generic[T], Document):
 
             doc_events = frappe.get_doc_hooks()
             for handler in doc_events.get(self.doctype, {}).get(method, []) \
-                    + doc_events.get("*", {}).get(method, []):
+                           + doc_events.get("*", {}).get(method, []):
                 hooks.append(frappe.get_attr(handler))
 
             composed = compose(f, *hooks)
