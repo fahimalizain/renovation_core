@@ -26,10 +26,10 @@ class EventLog(RenovationModel["EventLog"], EventLogMeta):
 
         # Make sure only the creator can delete
         current_contact = await get_current_pms_contact()
-        if current_contact.name != self.created_by:
+        if not current_contact or current_contact.name != self.created_by:
             raise OnlyTheCreatorCanDeleteEventLog(
                 created_by=self.created_by,
-                current_pms_contact=get_current_pms_contact().name
+                current_pms_contact=current_contact.name if current_contact else None
             )
 
         # Make sure this is not set as Primary anywhere else

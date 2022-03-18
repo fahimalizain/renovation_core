@@ -61,12 +61,16 @@ class OnlyLastEventCanBeDeleted(PMSException):
         self.error_code = "ONLY_LAST_EVENT_CAN_BE_DELETED"
         self.message = renovation._("Only the last event can be deleted")
         self.data = renovation._dict(
-            list_of_events=[list_of_events]
+            list_of_events=list_of_events
         )
 
 
 class OnlyTheCreatorCanDeleteEventLog(PMSException):
-    def __init__(self, created_by):
+    def __init__(self, created_by: str, current_pms_contact: str):
         self.http_status_code = 400
         self.error_code = "ONLY_THE_CREATOR_CAN_DELETE_EVENT_LOG"
         self.message = renovation._("Only creator can delete EventLog")
+        self.data = renovation._dict(
+            created_by=created_by,
+            current_pms_contact=current_pms_contact,
+        )

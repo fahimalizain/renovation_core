@@ -1,197 +1,197 @@
 {
-    "actions": [],
-    "allow_rename": 1,
-    "creation": "2021-12-17 19:03:12.010175",
-    "doctype": "DocType",
-    "editable_grid": 1,
-    "engine": "InnoDB",
-    "field_order": [
-        "enabled",
-        "user",
-        "first_name",
-        "last_name",
-        "email_id",
-        "mobile_no",
-        "column_break_7",
-        "contact_type",
-        "address",
-        "national_id",
-        "national_id_expiry",
-        "is_company",
-        "section_break_7",
-        "company_name",
-        "column_break_12",
-        "company_representative_contact",
-        "company_representative_name",
-        "section_break_10",
-        "notify_email",
-        "notify_sms",
-        "column_break_13",
-        "notify_telegram",
-        "notify_whatsapp"
-    ],
-    "fields": [
-        {
-            "default": "0",
-            "fieldname": "enabled",
-            "fieldtype": "Check",
-            "label": "Enabled"
-        },
-        {
-            "fieldname": "user",
-            "fieldtype": "Link",
-            "label": "User",
-            "options": "User",
-            "read_only": 1
-        },
-        {
-            "fieldname": "first_name",
-            "fieldtype": "Data",
-            "in_list_view": 1,
-            "label": "First Name",
-            "reqd": 1
-        },
-        {
-            "fieldname": "last_name",
-            "fieldtype": "Data",
-            "label": "Last Name"
-        },
-        {
-            "fieldname": "email_id",
-            "fieldtype": "Data",
-            "label": "Email ID"
-        },
-        {
-            "fieldname": "mobile_no",
-            "fieldtype": "Data",
-            "label": "Mobile No"
-        },
-        {
-            "fieldname": "column_break_7",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "contact_type",
-            "fieldtype": "Select",
-            "label": "Contact Type",
-            "options": "Tenant\nProperty Manager\nProperty Owner\nService Provider\nWatchman\nOthers"
-        },
-        {
-            "default": "0",
-            "fieldname": "is_company",
-            "fieldtype": "Check",
-            "label": "Is Company"
-        },
-        {
-            "fieldname": "section_break_10",
-            "fieldtype": "Section Break",
-            "label": "Notifications"
-        },
-        {
-            "default": "0",
-            "fieldname": "notify_email",
-            "fieldtype": "Check",
-            "label": "Notify Email"
-        },
-        {
-            "default": "0",
-            "fieldname": "notify_sms",
-            "fieldtype": "Check",
-            "label": "Notify SMS"
-        },
-        {
-            "fieldname": "column_break_13",
-            "fieldtype": "Column Break"
-        },
-        {
-            "default": "0",
-            "fieldname": "notify_telegram",
-            "fieldtype": "Check",
-            "label": "Notify Telegram"
-        },
-        {
-            "default": "0",
-            "fieldname": "notify_whatsapp",
-            "fieldtype": "Check",
-            "label": "Notify Whatsapp"
-        },
-        {
-            "depends_on": "is_company",
-            "fieldname": "section_break_7",
-            "fieldtype": "Section Break",
-            "label": "Company Info"
-        },
-        {
-            "fieldname": "company_name",
-            "fieldtype": "Data",
-            "label": "Company Name"
-        },
-        {
-            "fieldname": "company_representative_contact",
-            "fieldtype": "Link",
-            "label": "Company Representative Contact",
-            "options": "Contact"
-        },
-        {
-            "fetch_from": "company_representative_contact.first_name",
-            "fieldname": "company_representative_name",
-            "fieldtype": "Data",
-            "label": "Company Representative Name",
-            "read_only": 1
-        },
-        {
-            "fieldname": "column_break_12",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "address",
-            "fieldtype": "Small Text",
-            "label": "Address"
-        },
-        {
-            "fieldname": "national_id",
-            "fieldtype": "Data",
-            "label": "National ID"
-        },
-        {
-            "fieldname": "national_id_expiry",
-            "fieldtype": "Date",
-            "label": "National ID Expiry"
-        }
-    ],
-    "index_web_pages_for_search": 1,
-    "links": [],
-    "modified": "2022-02-22 10:04:18.350839",
-    "modified_by": "Administrator",
-    "module": "PMS Core",
-    "name": "PMS Contact",
-    "owner": "Administrator",
-    "permissions": [
-        {
-            "create": 1,
-            "delete": 1,
-            "email": 1,
-            "export": 1,
-            "print": 1,
-            "read": 1,
-            "report": 1,
-            "role": "System Manager",
-            "share": 1,
-            "write": 1
-        },
-        {
-            "create": 1,
-            "delete": 1,
-            "email": 1,
-            "export": 1,
-            "print": 1,
-            "read": 1,
-            "report": 1,
-            "role": "Property Manager",
-            "share": 1,
-            "write": 1
-        }
-    ],
-    "sort_field": "modified",
-    "sort_order": "DESC"
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2021-12-17 19:03:12.010175",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "user",
+  "first_name",
+  "last_name",
+  "email_id",
+  "mobile_no",
+  "column_break_7",
+  "contact_type",
+  "address",
+  "national_id",
+  "national_id_expiry",
+  "is_company",
+  "section_break_7",
+  "company_name",
+  "column_break_12",
+  "company_representative_contact",
+  "company_representative_name",
+  "section_break_10",
+  "notify_email",
+  "notify_sms",
+  "column_break_13",
+  "notify_telegram",
+  "notify_whatsapp"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "fieldname": "email_id",
+   "fieldtype": "Data",
+   "label": "Email ID"
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contact_type",
+   "fieldtype": "Select",
+   "label": "Contact Type",
+   "options": "Tenant\nProperty Manager\nProperty Owner\nService Provider\nWatchman\nOthers"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_company",
+   "fieldtype": "Check",
+   "label": "Is Company"
+  },
+  {
+   "fieldname": "section_break_10",
+   "fieldtype": "Section Break",
+   "label": "Notifications"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify_email",
+   "fieldtype": "Check",
+   "label": "Notify Email"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify_sms",
+   "fieldtype": "Check",
+   "label": "Notify SMS"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify_telegram",
+   "fieldtype": "Check",
+   "label": "Notify Telegram"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify_whatsapp",
+   "fieldtype": "Check",
+   "label": "Notify Whatsapp"
+  },
+  {
+   "depends_on": "is_company",
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break",
+   "label": "Company Info"
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
+  },
+  {
+   "fieldname": "company_representative_contact",
+   "fieldtype": "Link",
+   "label": "Company Representative Contact",
+   "options": "Contact"
+  },
+  {
+   "fetch_from": "company_representative_contact.first_name",
+   "fieldname": "company_representative_name",
+   "fieldtype": "Data",
+   "label": "Company Representative Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "national_id",
+   "fieldtype": "Data",
+   "label": "National ID"
+  },
+  {
+   "fieldname": "national_id_expiry",
+   "fieldtype": "Date",
+   "label": "National ID Expiry"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-03-18 09:26:44.489619",
+ "modified_by": "Administrator",
+ "module": "PMS Core",
+ "name": "PMS Contact",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Property Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
 }
