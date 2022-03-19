@@ -20,12 +20,7 @@ async def graphql_resolver(body: dict):
                 err = err.formatted
             errors.append(err)
         output.errors = errors
-        errors = []
-        for err in output.errors:
-            if isinstance(err, GraphQLError):
-                err = err.formatted
-            errors.append(err)
-        output.errors = errors
+
     return output
 
 
