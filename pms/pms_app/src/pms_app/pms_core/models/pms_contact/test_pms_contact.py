@@ -78,7 +78,7 @@ class TestPMSContact(unittest.TestCase):
         contact = PMSContact(dict(
             first_name="Test A",
             last_name="Test B",
-            email_id="test@test.com"
+            email_id="test-create@test.com"
         ))
 
         await contact.insert()
@@ -87,6 +87,10 @@ class TestPMSContact(unittest.TestCase):
 
         self.assertTrue(await PMSContact.exists(contact.name))
         self.assertIsNotNone(contact.user)
+
+        import frappe
+        user = frappe.get_doc("User", contact.user)
+        self.assertIn(contact.contact_type, [x.role for x in user.roles])
 
     @runnify
     async def test_user_is_created_when_mobile_is_specified(self):
@@ -109,7 +113,7 @@ class TestPMSContact(unittest.TestCase):
         contact = PMSContact(dict(
             first_name="Test A",
             last_name="Test B",
-            email_id="test@test.com"
+            email_id="test-delete@test.com"
         ))
 
         await contact.insert()

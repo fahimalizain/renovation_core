@@ -8,10 +8,14 @@ class PMSContact(RenovationModel["PMSContact"], PMSContactMeta):
     async def validate(self):
         await self.update_user()
 
-    async def after_delete(self):
+    async def on_trash(self):
         if self.user:
+            # unlink
+            await PMSContact.db_set_value(self.name, "user", None)
+
             import frappe
             await asyncify(frappe.delete_doc)("User", self.user)
+            await self.reload()
 
     async def update_user(self):
         # TODO: Handle User Doctype through Renovation
@@ -35,6 +39,9 @@ class PMSContact(RenovationModel["PMSContact"], PMSContactMeta):
         user.first_name = self.first_name
         user.last_name = self.last_name
         user.enabled = self.enabled
+        user.roles = []
+        user.append("roles", dict(role="PMS Contact"))
+        user.append("roles", dict(role=self.contact_type))
 
         await asyncify(user.save)(ignore_permissions=True)
         if not self.user:
