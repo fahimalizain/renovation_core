@@ -136,14 +136,27 @@ class TestEventLog(unittest.TestCase):
     @runnify
     async def test_setting_primary_on_child(self):
         from pms_app.pms_core import PrimaryEventLogCanOnlyBeSetOnRootLog
-        child_logs = await EventLog.get_all({"parent_log": ["is", "set"]})
-        parent_logs = await EventLog.get_all({"parent_log": ["is", "not set"]})
+        parent_log = (await EventLog.get_all({"parent_log": ["is", "not set"]}))[0].name
+        child_logs = await EventLog.get_all({"parent_log": parent_log})
 
+        # Should throw on child log
         child_log = await EventLog.get_doc(child_logs[0].name)
-        child_log.primary_log = parent_logs[0].name
+        child_log.primary_log = parent_log
 
         with self.assertRaises(PrimaryEventLogCanOnlyBeSetOnRootLog):
             await child_log.save()
+
+        await child_log.reload()
+
+        # Should save properly when set on parent_log
+        # Also verifies PrimaryEventLogDoNotBelongToCurrentThread is not raised
+        parent_log = await EventLog.get_doc(parent_log)
+        parent_log.primary_log = child_log.name
+        await parent_log.save()
+
+        # Reset
+        await EventLog.db_set_value(parent_log.name, "primary_log", None)
+        await parent_log.reload()
 
     @runnify
     async def test_set_primary_that_belongs_to_another_thread(self):
@@ -199,16 +212,40 @@ class TestEventLog(unittest.TestCase):
         await PMSContact.db_set_value(contact.name, "user", _user)
         await contact.reload()
 
-    # TODO: This particular test case could break the systems on_trash events
+    @runnify
+    async def test_deletion_by_someone_else(self):
+        from pms_app.pms_core import OnlyTheCreatorCanDeleteEventLog
+        renovation.set_user("Administrator")
+
+        log = self.event_logs[0]
+        self.assertNotEqual(renovation.user, await PMSContact.db_get_value(log.created_by, "user"))
+
+        with self.assertRaises(OnlyTheCreatorCanDeleteEventLog):
+            await log.delete()
+
+    @runnify
+    async def test_deletion_by_creator(self):
+        log = self.event_logs[0]
+        original_user = str(renovation.user)
+        creator_user = await PMSContact.db_get_value(log.created_by, "user")
+        renovation.set_user(creator_user)
+
+        import frappe
+        import asyncer
+        asyncer.asyncify(frappe.delete_doc)(log.doctype, log.name, ignore_permissions=True)
+
+        renovation.set_user(original_user)
+
+    # This particular test case could break the systems on_trash events
     # We need an async renovation.delete_doc
-    # @runnify
-    # async def test_set_proper_child_as_primary(self):
-    #     child_logs = await EventLog.get_all({"parent_log": ["is", "set"]}, ["name", "parent_log"])
-    #     parent_logs = await EventLog.get_all({"parent_log": ["is", "not set"]})
+    @runnify
+    async def test_set_proper_child_as_primary(self):
+        child_logs = await EventLog.get_all({"parent_log": ["is", "set"]}, ["name", "parent_log"])
+        parent_logs = await EventLog.get_all({"parent_log": ["is", "not set"]})
 
-    #     parent_log = await EventLog.get_doc(parent_logs[0].name)
-    #     proper_child = [x for x in child_logs if x.parent_log == parent_log.name][0].name
-    #     parent_log.primary_log = proper_child
+        parent_log = await EventLog.get_doc(parent_logs[0].name)
+        proper_child = [x for x in child_logs if x.parent_log == parent_log.name][0].name
+        parent_log.primary_log = proper_child
 
-    #     await parent_log.save()
-    #     self.assertEqual(parent_log.primary_log, proper_child)
+        await parent_log.save()
+        self.assertEqual(parent_log.primary_log, proper_child)
