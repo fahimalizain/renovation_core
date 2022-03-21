@@ -21,7 +21,9 @@ async def make_default_event_types():
     types = [
         _dict(
             title=EventTypes.CONCERN,
-            actions=["MAKE_MAINTENANCE_REQUEST", "MAKE_EXPENSE_ENTRY", "MAKE_TENANT_FINE"]
+            actions=["MAKE_MAINTENANCE_REQUEST", "MAKE_EXPENSE_ENTRY", "MAKE_TENANT_FINE"],
+            roles=["Watchman"],
+            models=["Unit", ]
         ),
         _dict(
             title=EventTypes.MESSAGE, actions=[],
@@ -53,6 +55,15 @@ async def make_default_event_types():
             d = EventType(_dict(title=t.title.value,))
 
         d.actions = "\n".join(t.actions or [])
+
+        d.roles = []
+        for r in (t.roles or []):
+            d.append("roles", dict(role=r))
+
+        d.models = []
+        for m in (t.models or []):
+            d.append("models", dict(model=m))
+
         await d.save()
         docs.append(d)
 

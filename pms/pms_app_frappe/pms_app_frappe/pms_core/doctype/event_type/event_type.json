@@ -8,7 +8,9 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
-  "actions"
+  "actions",
+  "roles",
+  "models"
  ],
  "fields": [
   {
@@ -23,11 +25,23 @@
    "fieldname": "actions",
    "fieldtype": "Small Text",
    "label": "Actions"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table MultiSelect",
+   "label": "Roles",
+   "options": "Has Role"
+  },
+  {
+   "fieldname": "models",
+   "fieldtype": "Table MultiSelect",
+   "label": "Supported Models",
+   "options": "Model Selector"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-12 11:22:54.597474",
+ "modified": "2022-03-21 10:00:30.311337",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "Event Type",
