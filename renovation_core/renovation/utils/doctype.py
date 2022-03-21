@@ -80,7 +80,7 @@ def generate_types(doc, r_dt_folder):
         elif df.fieldtype in table_fields:
             reqd = True
             if not is_renovation_doctype(df.options):
-                df_comment = True
+                _type = "List[dict]"
             else:
                 _add_import("typing", "List")
                 child_module = get_r_dt_module(df.options)
