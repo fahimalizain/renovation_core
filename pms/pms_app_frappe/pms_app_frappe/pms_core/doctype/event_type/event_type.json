@@ -8,9 +8,10 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
-  "actions",
   "roles",
-  "models"
+  "models",
+  "actions",
+  "action_info"
  ],
  "fields": [
   {
@@ -37,11 +38,16 @@
    "fieldtype": "Table MultiSelect",
    "label": "Supported Models",
    "options": "Model Selector"
+  },
+  {
+   "fieldname": "action_info",
+   "fieldtype": "Long Text",
+   "label": "Action Info"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-21 10:00:30.311337",
+ "modified": "2022-03-22 11:04:40.422444",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "Event Type",

@@ -48,6 +48,14 @@ class PMSContactFixtures(RenovationTestFixture):
         await tenant1.insert()
         self.add_document(tenant1)
 
+        pm1 = PMSContact(renovation._dict(
+            first_name="PM-1",
+            contact_type="Property Manager",
+            email_id=f.email() if self.make_users else None,
+        ))
+        await pm1.insert()
+        self.add_document(pm1)
+
 
 class TestPMSContact(unittest.TestCase):
     pms_contacts: PMSContactFixtures = PMSContactFixtures()
