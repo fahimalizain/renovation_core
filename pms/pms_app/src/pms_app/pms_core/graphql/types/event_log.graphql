@@ -1,7 +1,7 @@
-
-# extend type Query {
-#   EventLogGetEvents
-# }
+extend type Query {
+  EventLogGetEvents(model: String!, name: String!): [EventLog!]!
+  EventLogGetEventThread(parent_log: String!): [EventLog!]!
+}
 
 # extend type Mutation {
 #   EventLogCreate()
@@ -10,6 +10,7 @@
 
 type EventLog {
   name: String!
+  event_type: String!
   entity_type: String!
   entity: String!
   content: String
