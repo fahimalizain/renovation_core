@@ -3,10 +3,21 @@ extend type Query {
   EventLogGetEventThread(parent_log: String!): [EventLog!]!
 }
 
-# extend type Mutation {
-#   EventLogCreate()
-#   EventLogDelete()
-# }
+extend type Mutation {
+  EventLogCreate(data: EventLogCreateData!): EventLog!
+  EventLogDelete(event_log: ID!): Boolean!
+}
+
+input EventLogCreateData {
+  entity: String!
+  entity_type: String!
+  event_type: String!
+  ref_dt: String
+  ref_dn: String
+  attachment: String
+  content: String!
+  parent_log: String
+}
 
 type EventLog {
   name: String!
