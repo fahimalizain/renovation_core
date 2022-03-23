@@ -1,5 +1,5 @@
 import renovation
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 
 class EventLogData(renovation._dict, TypedDict):
@@ -10,3 +10,4 @@ class EventLogData(renovation._dict, TypedDict):
     ref_dn: str
     attachment: str
     content: str
+    parent_log: Optional[str]
