@@ -18,6 +18,7 @@ async def get_events(model: str, name: str):
     _sql = asyncify(renovation.local.db.sql)
     t = await _sql("""
     SELECT
+        event_log.name,
         event_log.entity_type, event_log.entity,
         coalesce(primary_log.created_by, event_log.created_by) AS created_by,
         coalesce(primary_log.event_type, event_log.event_type) AS event_type,

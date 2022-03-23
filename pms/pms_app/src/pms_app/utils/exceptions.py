@@ -71,3 +71,13 @@ class PermissionDenied(PMSException):
         self.data = _dict(
             **data
         )
+
+
+class NotFound(PMSException):
+    def __init__(self, message: Optional[str] = None, **data) -> None:
+        self.http_status_code = 401
+        self.error_code = "NOT_FOUND"
+        self.message = message or _("Not Found")
+        self.data = _dict(
+            **data
+        )
