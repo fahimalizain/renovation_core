@@ -1,6 +1,6 @@
 from graphql import GraphQLResolveInfo
 
-from .utils import get_contact_type_from_enum
+from ..utils import get_contact_type_from_enum
 from pms_app.pms_core.controllers.contact import update_contact
 from pms_app.utils import PMSException
 

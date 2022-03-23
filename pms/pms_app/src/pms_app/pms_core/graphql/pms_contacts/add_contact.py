@@ -1,7 +1,7 @@
 from graphql import GraphQLResolveInfo
 
 import renovation
-from .utils import get_contact_type_from_enum
+from ..utils import get_contact_type_from_enum
 from pms_app.pms_core.controllers.contact import add_contact
 from pms_app.utils import PMSException
 

@@ -1,0 +1,23 @@
+
+# extend type Query {
+#   EventLogGetEventTypes
+#   EventLogGetEvents
+# }
+
+# extend type Mutation {
+#   EventLogCreate()
+#   EventLogDelete()
+# }
+
+type EventLog {
+  name: String!
+  entity_type: String!
+  entity: String!
+  content: String
+  attachment: String
+  created_by: String!
+  primary_log: String
+  parent_log: String
+  ref_dt: String
+  ref_dn: String
+}
