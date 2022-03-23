@@ -1,0 +1,12 @@
+scalar EventTypeActionInfo
+
+type EventType {
+  name: String!
+  title: String!
+  actions: String
+  action_info: EventTypeActionInfo
+}
+
+extend type Query {
+  EventLogGetEventTypes(model: String!): [EventType!]!
+}

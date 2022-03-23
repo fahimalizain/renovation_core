@@ -31,4 +31,10 @@ async def get_event_types(model: str):
         AND (model_selector.model IS NULL OR model_selector.model = %(model)s)
     """, dict(roles=roles, model=model), as_dict=1, debug=0)
 
+    for event_type in event_types:
+        if not event_type.action_info:
+            event_type.action_info = renovation._dict()
+        else:
+            event_type.action_info = renovation.parse_json(event_type.action_info)
+
     return event_types

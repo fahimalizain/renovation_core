@@ -1,6 +1,5 @@
 
 # extend type Query {
-#   EventLogGetEventTypes
 #   EventLogGetEvents
 # }
 
