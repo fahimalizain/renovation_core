@@ -1,0 +1,48 @@
+type PMSCustomField {
+  name: ID!
+  enabled: Int!
+  label: String!
+  fieldname: String!
+  fieldtype: String!
+  options: String
+  description: String
+  insert_after: String
+  entity_type: String
+  entity: String
+  entities_excluded: [String!]!
+}
+
+input PMSCustomFieldData {
+  enabled: Int
+  label: String
+  fieldtype: String
+  options: String
+  description: String
+  insert_after: String
+  entity_type: String
+  entity: String
+  entities_excluded: [String!]!
+}
+
+scalar CustomFieldValue
+scalar CustomFieldValues
+
+extend type Query {
+  CustomFieldGet(entity_type: String, entity: ID): [PMSCustomField!]!
+  CustomFieldGetValuesFor(entity_type: String!, entity: ID!): CustomFieldValues!
+}
+
+extend type Mutation {
+  CustomFieldCreate(data: PMSCustomFieldData!): PMSCustomField!
+  CustomFieldUpdate(
+    custom_field: ID!
+    data: PMSCustomFieldData
+  ): PMSCustomField!
+  CustomFieldDelete(custom_field: ID!): Boolean!
+  CustomFieldSetValue(
+    entity_type: String!
+    entity: ID!
+    fieldname: String!
+    value: CustomFieldValue
+  ): CustomFieldValues!
+}

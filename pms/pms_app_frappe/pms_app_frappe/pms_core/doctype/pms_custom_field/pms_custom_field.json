@@ -58,7 +58,7 @@
   {
    "fieldname": "entity",
    "fieldtype": "Dynamic Link",
-   "label": "Document",
+   "label": "Entity",
    "options": "entity_type"
   },
   {
@@ -86,7 +86,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-24 12:14:35.724484",
+ "modified": "2022-03-24 13:23:08.626869",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "PMS Custom Field",
