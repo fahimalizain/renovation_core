@@ -6,6 +6,11 @@ import json
 
 def load_renovation_app_info():
 
+    if getattr(frappe.local, "loading_app_info", None):
+        # This is to prevent double loads
+        return
+    frappe.local.loading_app_info = True
+
     info = frappe._dict(
         apps=[],
         app_doctypes=frappe._dict(),
@@ -36,12 +41,20 @@ def load_renovation_app_info():
 
                 frappe.parse_json
                 doctype_module = f"{app}.{module}.doctype.{doctype}.{doctype}"
-                print("Importing ", doctype_module)
                 frappe.get_module(doctype_module)
 
                 with open(doctype_json) as j:
                     meta = json.load(j)
                     info.app_doctypes[renovation_app].append(meta.get("name"))
+
+    OK_GREEN = "\033[92m"
+    DARK_GRAY = "\033[1;30m"
+    END_C = "\033[0m"
+    print("")
+    for app, doctypes in info.app_doctypes.items():
+        print(OK_GREEN, app, END_C)
+        print(DARK_GRAY, ", ".join(doctypes), END_C)
+    print("")
 
     frappe.cache().set_value("renovation_app_info", info)
     return info
