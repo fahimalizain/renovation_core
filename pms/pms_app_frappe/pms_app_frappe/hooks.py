@@ -26,7 +26,7 @@ graphql_schema_processors = [
 
 fixtures = [
     {"dt": "Role", "filters": [["name", "in", [
-        "PMS Manager", "Property Manager", "PMS Contact",
+        "Sys Admin", "PMS Manager", "Property Manager", "PMS Contact",
         "Property Owner", "Tenant", "Service Provider", "Watchman",
     ]]]}
 ]
