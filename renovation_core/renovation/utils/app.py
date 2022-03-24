@@ -8,7 +8,7 @@ def load_renovation_app_info():
 
     if getattr(frappe.local, "loading_app_info", None):
         # This is to prevent double loads
-        return
+        return frappe.cache().get_value("renovation_app_info")
     frappe.local.loading_app_info = True
 
     info = frappe._dict(
