@@ -7,11 +7,12 @@
  "engine": "InnoDB",
  "field_order": [
   "enabled",
-  "title",
+  "label",
   "fieldname",
-  "description",
   "fieldtype",
   "options",
+  "column_break_6",
+  "description",
   "insert_after",
   "entity_type",
   "entity",
@@ -23,13 +24,6 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enabled"
-  },
-  {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Title",
-   "reqd": 1
   },
   {
    "fieldname": "fieldname",
@@ -47,7 +41,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Field Type",
-   "options": "Data\nSelect\nInteger\nFloat\nLink",
+   "options": "Data\nSelect\nInteger\nFloat",
    "reqd": 1
   },
   {
@@ -77,11 +71,22 @@
    "fieldname": "insert_after",
    "fieldtype": "Data",
    "label": "Insert After"
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-24 11:50:23.388193",
+ "modified": "2022-03-24 12:14:35.724484",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "PMS Custom Field",
