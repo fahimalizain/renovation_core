@@ -21,7 +21,7 @@ input PMSCustomFieldData {
   insert_after: String
   entity_type: String
   entity: String
-  entities_excluded: [String!]!
+  entities_excluded: [String!]
 }
 
 scalar CustomFieldValue

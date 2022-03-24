@@ -10,4 +10,7 @@ def bind_resolvers(schema: GraphQLSchema):
     from .event_logs import bind_resolvers as bind_event_log_resolvers
     bind_event_log_resolvers(schema)
 
+    from .custom_fields import bind_resolvers as bind_custom_field_resolvers
+    bind_custom_field_resolvers(schema)
+
     schema.mutation_type.fields["InvokeCMD"].resolve = invoke_cmd_resolver

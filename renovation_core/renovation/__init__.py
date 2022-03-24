@@ -7,7 +7,7 @@ from .orm import Field, Column  # noqa
 from .model import FrappeModel as RenovationModel  # noqa
 
 # Useful utilities
-from frappe import (local, _, parse_json, _dict, get_module,  # noqa
+from frappe import (local, _, parse_json, _dict, get_module, get_roles,  # noqa
      get_hooks, get_traceback, scrub, set_user, has_permission, whitelist, is_whitelisted)  # noqa
 
 
