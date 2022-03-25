@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import patch
 from asyncer import runnify
 
 import renovation
@@ -7,7 +8,7 @@ from renovation.tests import RenovationTestFixture
 from pms_app.pms_core.models.event_log.event_log import EventLog
 from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures, PMSContact
 from .pms_custom_field import PMSCustomField
-from .exceptions import InvalidCustomFieldOption
+from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType
 
 
 class PMSCustomFieldTestFixture(RenovationTestFixture):
@@ -74,6 +75,17 @@ class TestPMSCustomField(TestCase):
         self.custom_fields.add_document(r)
 
         self.assertEqual(r.fieldname, renovation.scrub(label))
+
+    @runnify
+    async def test_customizable_entity_type(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            entity_type="User"
+        ))
+
+        with self.assertRaises(NonCustomizableEntityType):
+            await r.insert()
 
     @runnify
     async def test_data_field(self):
@@ -218,3 +230,28 @@ class TestPMSCustomField(TestCase):
 
         await r.save()
         self.assertEqual(r.fieldtype, "Integer")
+
+    @runnify
+    async def test_get_applicable_entity_types(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            entity_type="PMS Contact"
+        ))
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        self.assertListEqual(r.get_applicable_entity_types(), ["PMS Contact"])
+
+        r.entity_type = None
+        await r.save()
+
+        _hook = renovation.get_hooks("pms_customizable_entity_types")
+        self.assertGreater(len(_hook), 1)
+        self.assertListEqual(r.get_applicable_entity_types(), list(set(_hook)))
+
+        r.append("entities_excluded", dict(model=_hook[0]))
+        await r.save()
+
+        _hook.remove(_hook[0])
+        self.assertListEqual(r.get_applicable_entity_types(), list(set(_hook)))

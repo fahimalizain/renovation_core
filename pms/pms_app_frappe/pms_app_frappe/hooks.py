@@ -12,6 +12,7 @@ app_license = "MIT"
 # Includes in <head>
 # ------------------
 renovation_app = "pms_app"
+pms_customizable_entity_types = ["PMS Contact", "Unit", "Property"]
 
 graphql_sdl_dir = [
     "pms_app/utils/graphql/types",

@@ -10,3 +10,13 @@ class InvalidCustomFieldOption(PMSException):
         self.data = renovation._dict(
             fieldname=fieldname, fieldtype=fieldtype, options=options
         )
+
+
+class NonCustomizableEntityType(PMSException):
+    def __init__(self, entity_type: str):
+        self.error_code = "ENTITY_TYPE_IS_NOT_CUSTOMIZABLE"
+        self.http_status_code = 400
+        self.message = renovation._("EntityType: {0} is not customizable").format(entity_type)
+        self.data = renovation._dict(
+            entity_type=entity_type
+        )

@@ -3,7 +3,7 @@ from renovation import RenovationModel, scrub
 import renovation
 
 from .pms_custom_field_types import PMSCustomFieldMeta
-from .exceptions import InvalidCustomFieldOption
+from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType
 
 
 class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
@@ -15,9 +15,18 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
         if not self.fieldname:
             self.fieldname = scrub(self.label)
 
+        self.validate_customizable_entity_type()
         self.validate_data_field()
         self.validate_select_field()
         self.validate_no_options_specified()
+
+    def validate_customizable_entity_type(self):
+        if not self.entity_type:
+            return
+
+        entity_types = set(renovation.get_hooks("pms_customizable_entity_types"))
+        if self.entity_type not in entity_types:
+            raise NonCustomizableEntityType(entity_type=self.entity_type)
 
     def validate_data_field(self):
         if self.fieldtype != "Data":
@@ -66,3 +75,15 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
                 fieldtype=self.fieldtype,
                 options=self.options,
                 message=renovation._("{0} fields cannot have options").format(self.fieldtype))
+
+    def get_applicable_entity_types(self):
+        if self.entity_type:
+            return [self.entity_type]
+
+        # Global
+        entities_excluded = [x.model for x in self.entities_excluded]
+
+        # Customizable Doctypes
+        customizable_types = set(renovation.get_hooks("pms_customizable_entity_types"))
+        customizable_types.difference_update(entities_excluded)
+        return list(customizable_types)
