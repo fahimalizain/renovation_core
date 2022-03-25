@@ -1,10 +1,13 @@
 from unittest import TestCase
 from asyncer import runnify
-from pms_app.pms_core.models.event_log.event_log import EventLog
 
+import renovation
 from renovation.tests import RenovationTestFixture
+
+from pms_app.pms_core.models.event_log.event_log import EventLog
 from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures, PMSContact
 from .pms_custom_field import PMSCustomField
+from .exceptions import InvalidCustomFieldOption
 
 
 class PMSCustomFieldTestFixture(RenovationTestFixture):
@@ -59,3 +62,75 @@ class TestPMSCustomField(TestCase):
     @runnify
     async def tearDown(self) -> None:
         await self.custom_fields.tearDown()
+
+    @runnify
+    async def test_fieldname(self):
+        label = "Test ABC"
+        r = PMSCustomField(dict(
+            label=label,
+            fieldtype="Data",
+        ))
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        self.assertEqual(r.fieldname, renovation.scrub(label))
+
+    @runnify
+    async def test_data_field(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            options="Random"
+        ))
+
+        with self.assertRaises(InvalidCustomFieldOption):
+            await r.insert()
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            options="Email"  # proper
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            options=None  # Empty
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+    @runnify
+    async def test_select_field(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Select",
+            options=None
+        ))
+
+        with self.assertRaises(InvalidCustomFieldOption):
+            await r.insert()
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Select",
+            options="AB\nCD"  # Normal
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Select",
+            options="AB  \n  CD  "
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        self.assertEqual(r.options, "AB\nCD")
