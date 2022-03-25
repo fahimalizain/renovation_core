@@ -81,3 +81,13 @@ class NotFound(PMSException):
         self.data = _dict(
             **data
         )
+
+
+class InvalidArguments(PMSException):
+    def __init__(self, message: Optional[str] = None, **data) -> None:
+        self.http_status_code = 401
+        self.error_code = "INVALID_ARGUMENTS"
+        self.message = message or _("Invalid Arguments")
+        self.data = _dict(
+            **data
+        )

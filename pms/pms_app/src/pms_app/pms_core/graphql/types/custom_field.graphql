@@ -28,7 +28,7 @@ scalar CustomFieldValue
 scalar CustomFieldValues
 
 extend type Query {
-  CustomFieldGet(entity_type: String, entity: ID): [PMSCustomField!]!
+  CustomFieldsGet(entity_type: String, entity: ID): [PMSCustomField!]!
   CustomFieldGetValuesFor(entity_type: String!, entity: ID!): CustomFieldValues!
 }
 
