@@ -173,3 +173,48 @@ class TestPMSCustomField(TestCase):
 
         await r.insert()
         self.custom_fields.add_document(r)
+
+    @runnify
+    async def test_rename_label(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            options="Email"  # proper
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+        fieldname = r.fieldname
+
+        r.label = "Test B"
+        await r.save()
+
+        self.assertEqual(fieldname, r.fieldname)
+
+    @runnify
+    async def test_fieldtype_updates(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Data",
+            options="Email"  # proper
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        # Change to Select
+        r.fieldtype = "Select"
+        await r.save()
+        self.assertEqual(r.fieldtype, "Select")
+
+        # Change to Integer
+        r.fieldtype = "Integer"
+        with self.assertRaises(InvalidCustomFieldOption):
+            await r.save()
+
+        await r.reload()
+        r.options = None
+        r.fieldtype = "Integer"
+
+        await r.save()
+        self.assertEqual(r.fieldtype, "Integer")

@@ -7,6 +7,10 @@ from .exceptions import InvalidCustomFieldOption
 
 
 class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
+    """
+    - FieldType updates are allowed with no restrictions
+    """
+
     def validate(self):
         if not self.fieldname:
             self.fieldname = scrub(self.label)
