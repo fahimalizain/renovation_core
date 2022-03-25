@@ -134,3 +134,42 @@ class TestPMSCustomField(TestCase):
         self.custom_fields.add_document(r)
 
         self.assertEqual(r.options, "AB\nCD")
+
+    @runnify
+    async def test_options_on_int_and_float(self):
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Integer",
+            options="Email"
+        ))
+
+        with self.assertRaises(InvalidCustomFieldOption):
+            await r.insert()
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Float",
+            options="Random"
+        ))
+
+        with self.assertRaises(InvalidCustomFieldOption):
+            await r.insert()
+
+        # Proper
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Float",
+            options=None
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)
+
+        r = PMSCustomField(dict(
+            label="Test A",
+            fieldtype="Integer",
+            options=None
+        ))
+
+        await r.insert()
+        self.custom_fields.add_document(r)

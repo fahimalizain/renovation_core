@@ -13,6 +13,7 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
 
         self.validate_data_field()
         self.validate_select_field()
+        self.validate_no_options_specified()
 
     def validate_data_field(self):
         if self.fieldtype != "Data":
@@ -50,3 +51,14 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
 
         options = self.options.split("\n")
         self.options = "\n".join([x.strip() for x in options])
+
+    def validate_no_options_specified(self):
+        if self.fieldtype not in ("Integer", "Float"):
+            return
+
+        if self.options:
+            raise InvalidCustomFieldOption(
+                fieldname=self.fieldname,
+                fieldtype=self.fieldtype,
+                options=self.options,
+                message=renovation._("{0} fields cannot have options").format(self.fieldtype))
