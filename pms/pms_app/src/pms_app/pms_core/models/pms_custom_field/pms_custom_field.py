@@ -3,7 +3,9 @@ from renovation import RenovationModel, scrub
 import renovation
 
 from .pms_custom_field_types import PMSCustomFieldMeta
-from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType
+from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType, DuplicateFieldname
+
+CF_FIELDNAME_PREFIX = "pmscf_"
 
 
 class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
@@ -11,11 +13,12 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
     - FieldType updates are allowed with no restrictions
     """
 
-    def validate(self):
+    async def validate(self):
         if not self.fieldname:
-            self.fieldname = scrub(self.label)
+            self.fieldname = CF_FIELDNAME_PREFIX + scrub(self.label)
 
         self.validate_customizable_entity_type()
+        await self.validate_unique_fieldname()
         self.validate_data_field()
         self.validate_select_field()
         self.validate_no_options_specified()
@@ -27,6 +30,34 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
         entity_types = set(renovation.get_hooks("pms_customizable_entity_types"))
         if self.entity_type not in entity_types:
             raise NonCustomizableEntityType(entity_type=self.entity_type)
+
+    async def validate_unique_fieldname(self):
+        # Test uniqueness with existing Custom Fields
+        entity_types = self.get_applicable_entity_types()
+        custom_fields = await PMSCustomField.get_all(
+            dict(fieldname=self.fieldname))
+
+        for cf in custom_fields:
+            if cf.name == self.name:
+                continue
+
+            cf = await PMSCustomField.get_doc(cf.name)
+            cf_entity_types = set(cf.get_applicable_entity_types())
+
+            common_entities = list(cf_entity_types.intersection(entity_types))
+            if len(common_entities) > 0:
+                raise DuplicateFieldname(
+                    fieldname=self.fieldname, fieldtype=self.fieldtype, options=self.options,
+                    entity_type=common_entities[0]
+                )
+
+        for entity_type in self.get_applicable_entity_types():
+            meta = renovation.get_meta(entity_type)
+            if meta.get_field(self.fieldname):
+                raise DuplicateFieldname(
+                    fieldname=self.fieldname, fieldtype=self.fieldtype, options=self.options,
+                    entity_type=entity_type
+                )
 
     def validate_data_field(self):
         if self.fieldtype != "Data":

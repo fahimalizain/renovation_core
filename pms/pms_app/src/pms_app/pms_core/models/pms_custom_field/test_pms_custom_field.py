@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest.mock import patch
 from asyncer import runnify
 
 import renovation
@@ -7,8 +6,8 @@ from renovation.tests import RenovationTestFixture
 
 from pms_app.pms_core.models.event_log.event_log import EventLog
 from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures, PMSContact
-from .pms_custom_field import PMSCustomField
-from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType
+from .pms_custom_field import PMSCustomField, CF_FIELDNAME_PREFIX
+from .exceptions import DuplicateFieldname, InvalidCustomFieldOption, NonCustomizableEntityType
 
 
 class PMSCustomFieldTestFixture(RenovationTestFixture):
@@ -74,7 +73,7 @@ class TestPMSCustomField(TestCase):
         await r.insert()
         self.custom_fields.add_document(r)
 
-        self.assertEqual(r.fieldname, renovation.scrub(label))
+        self.assertEqual(r.fieldname, CF_FIELDNAME_PREFIX + renovation.scrub(label))
 
     @runnify
     async def test_customizable_entity_type(self):
@@ -88,6 +87,17 @@ class TestPMSCustomField(TestCase):
             await r.insert()
 
     @runnify
+    async def test_unique_fieldname(self):
+        r = PMSCustomField(dict(
+            label=self.custom_fields[0].label,
+            fieldtype="Data",
+            entity_type="PMS Contact"
+        ))
+
+        with self.assertRaises(DuplicateFieldname):
+            await r.save()
+
+    @runnify
     async def test_data_field(self):
         r = PMSCustomField(dict(
             label="Test A",
@@ -99,7 +109,7 @@ class TestPMSCustomField(TestCase):
             await r.insert()
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test AX",
             fieldtype="Data",
             options="Email"  # proper
         ))
@@ -108,7 +118,7 @@ class TestPMSCustomField(TestCase):
         self.custom_fields.add_document(r)
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test AB",
             fieldtype="Data",
             options=None  # Empty
         ))
@@ -119,7 +129,7 @@ class TestPMSCustomField(TestCase):
     @runnify
     async def test_select_field(self):
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test AX",
             fieldtype="Select",
             options=None
         ))
@@ -128,7 +138,7 @@ class TestPMSCustomField(TestCase):
             await r.insert()
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test BX",
             fieldtype="Select",
             options="AB\nCD"  # Normal
         ))
@@ -137,7 +147,7 @@ class TestPMSCustomField(TestCase):
         self.custom_fields.add_document(r)
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test CX",
             fieldtype="Select",
             options="AB  \n  CD  "
         ))
@@ -150,7 +160,7 @@ class TestPMSCustomField(TestCase):
     @runnify
     async def test_options_on_int_and_float(self):
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test AX",
             fieldtype="Integer",
             options="Email"
         ))
@@ -159,7 +169,7 @@ class TestPMSCustomField(TestCase):
             await r.insert()
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test BX",
             fieldtype="Float",
             options="Random"
         ))
@@ -169,7 +179,7 @@ class TestPMSCustomField(TestCase):
 
         # Proper
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test CX",
             fieldtype="Float",
             options=None
         ))
@@ -178,7 +188,7 @@ class TestPMSCustomField(TestCase):
         self.custom_fields.add_document(r)
 
         r = PMSCustomField(dict(
-            label="Test A",
+            label="Test DX",
             fieldtype="Integer",
             options=None
         ))
@@ -248,10 +258,10 @@ class TestPMSCustomField(TestCase):
 
         _hook = renovation.get_hooks("pms_customizable_entity_types")
         self.assertGreater(len(_hook), 1)
-        self.assertListEqual(r.get_applicable_entity_types(), list(set(_hook)))
+        self.assertCountEqual(r.get_applicable_entity_types(), list(set(_hook)))
 
         r.append("entities_excluded", dict(model=_hook[0]))
         await r.save()
 
         _hook.remove(_hook[0])
-        self.assertListEqual(r.get_applicable_entity_types(), list(set(_hook)))
+        self.assertCountEqual(r.get_applicable_entity_types(), list(set(_hook)))

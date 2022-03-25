@@ -20,3 +20,15 @@ class NonCustomizableEntityType(PMSException):
         self.data = renovation._dict(
             entity_type=entity_type
         )
+
+
+class DuplicateFieldname(PMSException):
+    def __init__(self, fieldname, fieldtype, options, entity_type: str):
+        self.error_code = "DUPLICATE_FIELDNAME"
+        self.http_status_code = 400
+        self.message = renovation._(
+            "EntityType: {0} has another field with name: {1}").format(entity_type, fieldname)
+        self.data = renovation._dict(
+            fieldname=fieldname, fieldtype=fieldtype, options=options,
+            entity_type=entity_type
+        )
