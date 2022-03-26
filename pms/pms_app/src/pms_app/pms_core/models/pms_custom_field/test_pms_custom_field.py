@@ -6,7 +6,10 @@ from renovation.tests import RenovationTestFixture
 
 from pms_app.pms_core.models.event_log.event_log import EventLog
 from pms_app.pms_core.models.pms_contact.test_pms_contact import PMSContactFixtures, PMSContact
-from .pms_custom_field import PMSCustomField, CF_FIELDNAME_PREFIX
+from .pms_custom_field import (
+    PMSCustomField,
+    CF_FIELDNAME_PREFIX,
+    PMS_CUSTOMIZABLE_ENTITY_TYPES_HOOK)
 from .exceptions import DuplicateFieldname, InvalidCustomFieldOption, NonCustomizableEntityType
 
 
@@ -256,7 +259,7 @@ class TestPMSCustomField(TestCase):
         r.entity_type = None
         await r.save()
 
-        _hook = renovation.get_hooks("pms_customizable_entity_types")
+        _hook = renovation.get_hooks(PMS_CUSTOMIZABLE_ENTITY_TYPES_HOOK)
         self.assertGreater(len(_hook), 1)
         self.assertCountEqual(r.get_applicable_entity_types(), list(set(_hook)))
 

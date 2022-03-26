@@ -6,6 +6,7 @@ from .pms_custom_field_types import PMSCustomFieldMeta
 from .exceptions import InvalidCustomFieldOption, NonCustomizableEntityType, DuplicateFieldname
 
 CF_FIELDNAME_PREFIX = "pmscf_"
+PMS_CUSTOMIZABLE_ENTITY_TYPES_HOOK = "pms_customizable_entity_types"
 
 
 class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
@@ -27,7 +28,7 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
         if not self.entity_type:
             return
 
-        entity_types = set(renovation.get_hooks("pms_customizable_entity_types"))
+        entity_types = set(renovation.get_hooks(PMS_CUSTOMIZABLE_ENTITY_TYPES_HOOK))
         if self.entity_type not in entity_types:
             raise NonCustomizableEntityType(entity_type=self.entity_type)
 
@@ -115,6 +116,6 @@ class PMSCustomField(RenovationModel["PMSCustomField"], PMSCustomFieldMeta):
         entities_excluded = [x.model for x in self.entities_excluded]
 
         # Customizable Doctypes
-        customizable_types = set(renovation.get_hooks("pms_customizable_entity_types"))
+        customizable_types = set(renovation.get_hooks(PMS_CUSTOMIZABLE_ENTITY_TYPES_HOOK))
         customizable_types.difference_update(entities_excluded)
         return list(customizable_types)
