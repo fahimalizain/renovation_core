@@ -44,10 +44,10 @@ class TestGetCustomFieldValuesFor(TestCase):
 
     @runnify
     async def test_float(self):
-        cf_integer: PMSCustomField = [x for x in self.custom_fields if x.fieldtype == "Float"][0]
+        cf_float: PMSCustomField = [x for x in self.custom_fields if x.fieldtype == "Float"][0]
         entity_type = "PMS Contact"
 
         values = await get_custom_field_values_for(
             entity_type, renovation.local.db.get_value(entity_type, dict()))
 
-        self.assertIsInstance(values.get(cf_integer.fieldname), float)
+        self.assertIsInstance(values.get(cf_float.fieldname), float)

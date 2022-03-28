@@ -24,7 +24,6 @@ input PMSCustomFieldData {
   entities_excluded: [String!]
 }
 
-scalar CustomFieldValue
 scalar CustomFieldValues
 
 extend type Query {
@@ -40,10 +39,9 @@ extend type Mutation {
     data: PMSCustomFieldData
   ): PMSCustomField!
   CustomFieldDelete(custom_field: ID!): Boolean!
-  CustomFieldSetValue(
+  CustomFieldUpdateValuesFor(
     entity_type: String!
     entity: ID!
-    fieldname: String!
-    value: CustomFieldValue
+    values: CustomFieldValues
   ): CustomFieldValues!
 }

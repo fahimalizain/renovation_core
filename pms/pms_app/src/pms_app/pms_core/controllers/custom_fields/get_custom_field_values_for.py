@@ -28,7 +28,7 @@ async def get_custom_field_values_for(entity_type: str, entity: str):
     WHERE
         cf_value.entity_type = %(entity_type)s
         AND cf_value.entity = %(entity)s
-    """, dict(entity_type=entity_type, entity=entity), as_dict=1, debug=1)
+    """, dict(entity_type=entity_type, entity=entity), as_dict=1, debug=0)
 
     result = renovation._dict()
     for cf_value in r:
