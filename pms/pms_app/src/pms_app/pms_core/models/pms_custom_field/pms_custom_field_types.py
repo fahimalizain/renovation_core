@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 from pms_app.pms_core.models.model_selector.model_selector import ModelSelector
 
 

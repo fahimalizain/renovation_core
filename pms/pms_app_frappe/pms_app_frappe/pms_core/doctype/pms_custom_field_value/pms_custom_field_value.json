@@ -17,7 +17,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Field Name",
-   "reqd": 1
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "entity_type",
@@ -43,7 +44,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-24 10:50:36.843998",
+ "modified": "2022-03-28 11:35:03.792843",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "PMS Custom Field Value",

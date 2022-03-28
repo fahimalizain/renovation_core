@@ -22,6 +22,13 @@ class PMSCustomFieldValue(RenovationModel["PMSCustomFieldValue"], PMSCustomField
         await self.validate_select_field()
         await self.validate_number_field()
 
+    async def get_parsed_value(self):
+        return await get_parsed_value(
+            value=self.value,
+            fieldtype=await self.get_fieldtype(),
+            options=await self.get_options(),
+        )
+
     async def get_custom_field(self):
         if self._cf:
             return self._cf
@@ -89,3 +96,17 @@ class PMSCustomFieldValue(RenovationModel["PMSCustomFieldValue"], PMSCustomField
             return
 
         self.value = str(value)
+
+
+async def get_parsed_value(value: str, fieldtype: str, options: str):
+
+    if fieldtype == "Float":
+        value = renovation.flt(value)
+    elif fieldtype == "Integer":
+        value = renovation.cint(value)
+    elif fieldtype == "Select":
+        options = options.split("\n")
+        if value not in options:
+            value = None
+
+    return value

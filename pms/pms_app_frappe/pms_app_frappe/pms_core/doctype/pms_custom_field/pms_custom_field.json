@@ -29,7 +29,8 @@
    "fieldname": "fieldname",
    "fieldtype": "Data",
    "label": "Field Name",
-   "read_only": 1
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "fieldname": "description",
@@ -86,7 +87,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-24 15:18:23.999660",
+ "modified": "2022-03-28 11:34:22.040749",
  "modified_by": "Administrator",
  "module": "PMS Core",
  "name": "PMS Custom Field",
