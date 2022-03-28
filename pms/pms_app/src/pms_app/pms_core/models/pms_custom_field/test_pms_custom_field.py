@@ -25,6 +25,14 @@ class PMSCustomFieldTestFixture(RenovationTestFixture):
         self.NON_EXCLUDED_ENTITY = EventLog.get_doctype()
 
     async def make_fixtures(self):
+
+        self.add_document(await PMSCustomField(dict(
+            label="Gamer Tag",
+            fieldtype="Data",
+            description="###",
+            entity_type=None,  # General to all!
+        )).insert())
+
         self.add_document(await PMSCustomField(dict(
             label="Height X",
             fieldtype="Float",

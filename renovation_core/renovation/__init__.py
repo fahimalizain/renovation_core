@@ -9,6 +9,7 @@ from .model import FrappeModel as RenovationModel  # noqa
 # Useful utilities
 from frappe import (local, _, parse_json, _dict, get_module, get_roles, get_meta,  # noqa
      get_hooks, get_traceback, scrub, set_user, has_permission, whitelist, is_whitelisted)  # noqa
+from frappe.utils import cint, flt  # noqa
 
 
 def get_attr(method_string):
