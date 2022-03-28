@@ -6,6 +6,7 @@ from pms_app.utils.exceptions import NotFound
 import renovation
 from renovation.tests import RenovationTestFixture
 
+from ..pms_contact.pms_contact import PMSContact
 from .pms_custom_field_value import PMSCustomFieldValue
 from .exceptions import CustomFieldNotApplicableOnEntityType, InvalidValueForSelectField
 from ..pms_custom_field.test_pms_custom_field import PMSCustomFieldTestFixture, PMSCustomField
@@ -186,3 +187,29 @@ class TestPMSCustomFieldValue(TestCase):
         # Make sure there exists CFValues that belonged to the fieldname we just deleted
         values = await PMSCustomFieldValue.get_all(dict(fieldname=cf.fieldname))
         self.assertGreater(len(values), 0)
+
+    @runnify
+    async def test_document_hooks(self):
+        d = PMSContact(dict(
+            first_name="ABCD",
+        ))
+        cf = [x for x in self.custom_field_values.get_dependencies(
+            PMSCustomField) if x.fieldtype == "Data"][0]
+
+        _value = "random-value"
+        d.update({cf.fieldname: _value})
+
+        await d.insert()
+
+        cf_value = await PMSCustomFieldValue.db_get_value(dict(
+            entity_type=PMSContact.get_doctype(), entity=d.name,
+            fieldname=cf.fieldname
+        ))
+        self.assertIsNotNone(cf_value)
+        self.assertTrue(await PMSCustomFieldValue.exists(cf_value))
+        self.assertEqual(_value, await PMSCustomFieldValue.db_get_value(cf_value, "value"))
+
+        await d.reload()
+
+        await d.delete()
+        self.assertFalse(await PMSCustomFieldValue.exists(cf_value))

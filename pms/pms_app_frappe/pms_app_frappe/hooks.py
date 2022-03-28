@@ -25,6 +25,14 @@ graphql_schema_processors = [
     "pms_app.properties.graphql.bind_resolvers",
 ]
 
+doc_events = {
+    "*": {
+        "onload": "pms_app_frappe.doc_events.common.onload",
+        "on_trash": "pms_app_frappe.doc_events.common.on_trash",
+        "on_update": "pms_app_frappe.doc_events.common.on_update",
+    }
+}
+
 fixtures = [
     {"dt": "Role", "filters": [["name", "in", [
         "Sys Admin", "PMS Manager", "Property Manager", "PMS Contact",
