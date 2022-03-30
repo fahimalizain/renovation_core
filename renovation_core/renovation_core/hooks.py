@@ -16,6 +16,9 @@ doc_events = {
     "Custom Field": {
         "on_update": "renovation_core.docevents.doctype.on_custom_field_update",
         "after_delete": "renovation_core.docevents.doctype.on_custom_field_update"
+    },
+    "User": {
+        "on_trash": "renovation_core.docevents.user.on_trash"
     }
 }
 

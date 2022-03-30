@@ -83,6 +83,13 @@ class NotFound(PMSException):
         )
 
 
+class InvalidCredentials(PMSException):
+    def __init__(self, message: Optional[str] = None,) -> None:
+        self.http_status_code = 401
+        self.error_code = "INVALID_CREDENTIALS"
+        self.message = message or _("Invalid Credentias")
+
+
 class InvalidArguments(PMSException):
     def __init__(self, message: Optional[str] = None, **data) -> None:
         self.http_status_code = 401

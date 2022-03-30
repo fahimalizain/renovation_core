@@ -3,6 +3,24 @@ from frappe.utils import get_url
 import asyncer
 
 
+async def update_user_password(email: str, new_password: str):
+    from frappe.utils.password import update_password
+
+    await asyncer.asyncify(update_password)(
+        user=email, pwd=new_password, doctype="User", fieldname="password"
+    )
+
+
+async def check_user_password(email: str, pwd: str):
+    from frappe.utils.password import check_password
+
+    try:
+        await asyncer.asyncify(check_password)(email, pwd)
+        return True
+    except BaseException:
+        return False
+
+
 def get_oath_client():
     client = frappe.db.get_value("OAuth Client", {})
     if not client:
