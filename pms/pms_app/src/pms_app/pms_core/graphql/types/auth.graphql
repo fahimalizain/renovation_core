@@ -5,8 +5,8 @@ extend type Query {
 }
 
 extend type Mutation {
-  authTokenCreate(email: String!, password: Password!): AuthTokenCreate!
-  # authTokenRefresh(refreshToken: String!): AuthTokenRefresh!
+  authTokenCreate(email: String!, password: Password!): AuthToken!
+  authTokenRefresh(refreshToken: String!): AuthToken!
 }
 
 type AuthMeInfo {
@@ -17,12 +17,12 @@ type AuthMeInfo {
   user: String
 }
 
-type AuthTokenCreate {
+type AuthToken {
   access_token: Password!
   expires_in: Int
   token_type: String
   scopes: String
   refresh_token: String!
-  id_token: String!
+  id_token: String
   pms_contact_info: AuthMeInfo
 }

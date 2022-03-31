@@ -158,6 +158,7 @@ async def make_wsgi_compatible(request: Request):
         **{"HTTP_{}".format(k.upper().replace("-", "_")): v for k, v in request.headers.items()},
         "CONTENT_TYPE": request.headers.get("content-type", None),
         "CONTENT_LENGTH": request.headers.get("content-length", None),
+        "REQUEST_METHOD": request.method,
     })
 
     r = WerkzeugRequest(environ=environ, populate_request=True, shallow=False)

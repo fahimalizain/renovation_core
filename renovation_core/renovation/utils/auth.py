@@ -98,3 +98,37 @@ async def get_bearer_token(user, expires_in=3600):
     token.id_token = id_token_encoded
     frappe.flags.jwt = id_token_encoded
     return token
+
+
+async def get_bearer_token_against_refresh_token(refresh_token: str):
+    from frappe.integrations.oauth2 import get_token
+    r = frappe.request
+    r.form = frappe._dict(
+        grant_type="refresh_token",
+        refresh_token=refresh_token
+    )
+    frappe.form_dict.refresh_token = refresh_token
+
+    # frappe.oauth.authenticate_client
+    # requires cookies.user_id to be equal to frappe.session.user
+    # to be successful. It is a bug in frappe
+    # Let's bypass it temporarily
+    r = frappe.request
+    r.headers = frappe._dict(r.headers)  # EnvironHeaders are immutable
+    r.headers["Cookie"] = "user_id={};".format(frappe.session.user)
+
+    get_token()
+    token = frappe._dict(frappe.local.response)
+
+    token.user = frappe.db.get_value(
+        "OAuth Bearer Token",
+        token.access_token,
+        "user"
+    )
+    frappe.set_user(token.user)
+
+    # Let's delete this refreshToken
+    frappe.db.set_value(
+        "OAuth Bearer Token", {"refresh_token": refresh_token}, "refresh_token", "void")
+
+    return token
