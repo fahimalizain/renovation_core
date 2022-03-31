@@ -1,7 +1,7 @@
 # scalar Password
 
 extend type Query {
-  authGetMe: AuthMeInfo!
+  authGetMe: AuthMeInfo
 }
 
 extend type Mutation {
@@ -12,9 +12,9 @@ extend type Mutation {
 type AuthMeInfo {
   pms_contact: String!
   first_name: String!
-  last_name: String!
+  last_name: String
   contact_type: String!
-  user: String!
+  user: String
 }
 
 type AuthTokenCreate {

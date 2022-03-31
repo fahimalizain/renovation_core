@@ -13,6 +13,9 @@ from asyncer import asyncify
 import frappe
 import frappe.app
 import frappe.auth
+from frappe.api import validate_auth
+
+from werkzeug.wrappers import Request as WerkzeugRequest
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from frappe.middlewares import StaticDataMiddleware
 
@@ -119,8 +122,9 @@ class FrappeMiddleware:
         response = None
         commit = True
         try:
-            await make_wsgi_compatible(request=request)
-            frappe.app.init_request(request=request)
+            wsgi_request = await make_wsgi_compatible(request=request)
+            frappe.app.init_request(request=wsgi_request)
+            await asyncify(validate_auth)()  # JWT
 
             response = await call_next(request)
 
@@ -150,29 +154,26 @@ class FrappeMiddleware:
 
 
 async def make_wsgi_compatible(request: Request):
-    request.environ = None
-    request.host = request.client.host
-    request.path = request.url.path
-    request.scheme = request.url.scheme
-    request.content_type = request.headers.get("content-type", None)
+    environ = dict({
+        **{"HTTP_{}".format(k.upper().replace("-", "_")): v for k, v in request.headers.items()},
+        "CONTENT_TYPE": request.headers.get("content-type", None),
+        "CONTENT_LENGTH": request.headers.get("content-length", None),
+    })
 
-    request.accept_languages = request.headers.get("accept-language", None)
-    if request.accept_languages:  # 'en-US,en;q=0.9'
-        _lang = dict()
-        for i, lang in enumerate(request.accept_languages.split(";")[0].split(",")):
-            _lang[i] = lang
-        request.accept_languages = _lang
-    else:
-        request.accept_languages = dict()
+    r = WerkzeugRequest(environ=environ, populate_request=True, shallow=False)
+
+    r.host = request.client.host
+    r.path = request.url.path
+    r.scheme = request.url.scheme
 
     # !important to ask for body before form
     body = frappe.safe_decode(await request.body())
     # python-multipart==0.0.5 dependency
     form = await request.form()
-    request.form = form
+    r.form = form
 
-    request.args = request.query_params
-    request.get_data = lambda **kwargs: body
+    r.args = request.query_params
+    r.get_data = lambda **kwargs: body
 
     async def _receive():
         return {
@@ -182,3 +183,6 @@ async def make_wsgi_compatible(request: Request):
         }
 
     request._receive = _receive
+    r.url = request.url._url
+
+    return r
