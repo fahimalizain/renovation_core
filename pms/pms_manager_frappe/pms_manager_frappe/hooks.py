@@ -9,6 +9,8 @@ app_color = "grey"
 app_email = "info@leam.ae"
 app_license = "MIT"
 
+renovation_app = "pms_manager"
+
 graphql_sdl_dir = [
     # "./pms_manager/pms_manager/utils/graphql/types",
     # "./pms_manager/pms_manager/pms_package/graphql/types",
