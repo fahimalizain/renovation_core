@@ -1,6 +1,0 @@
-type UnitItem {
-  name: String
-  unit: Unit!
-  unit__name: String
-  unit_type: String
-}

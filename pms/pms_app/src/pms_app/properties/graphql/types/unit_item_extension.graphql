@@ -1,9 +1,0 @@
-
-input UnitItemCreateInput {
-  unit: String!
-}
-
-input UnitItemUpdateInput {
-  name: String
-  unit: String
-}

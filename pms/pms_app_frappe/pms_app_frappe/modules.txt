@@ -1,3 +1,0 @@
-PMS App Frappe
-PMS Core
-Properties

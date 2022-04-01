@@ -1,6 +1,0 @@
-scalar InvokeCMDArgs
-scalar InvokeCMDResponse
-
-extend type Mutation {
-  InvokeCMD(cmd: String!, args: InvokeCMDArgs): InvokeCMDResponse
-}

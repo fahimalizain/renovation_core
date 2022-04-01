@@ -1,2 +1,0 @@
-class ModelSelectorMeta:
-    model: str

@@ -1,6 +1,0 @@
-type UnitTypeItem {
-  name: String
-  enabled: Int
-  unit_type: UnitType!
-  unit_type__name: String
-}

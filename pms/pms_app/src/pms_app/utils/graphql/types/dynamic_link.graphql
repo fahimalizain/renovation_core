@@ -1,7 +1,0 @@
-type DynamicLink {
-  # link_doctype: DocType!
-  link_doctype__name: String
-  # link_name: BaseDocType!
-  link_name__name: String
-  link_title: String
-}

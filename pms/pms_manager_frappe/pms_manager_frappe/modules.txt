@@ -1,4 +1,0 @@
-PMS Manager
-PMS Package
-PMS Customer
-PMS Support
